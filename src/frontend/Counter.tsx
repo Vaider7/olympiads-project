@@ -1,10 +1,6 @@
 import * as React from 'react';
 import {ReactNode} from "react";
 
-interface Json {
-
-}
-
 export default class Counter extends React.Component {
   state = {
     count: 0
