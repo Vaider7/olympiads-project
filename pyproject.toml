@@ -2,12 +2,23 @@
 name = "olympiads_project"
 version = "0.1.0"
 description = "Olympiads project for the best University in the Universe"
-authors = ["Your Name <you@example.com>"]
+authors = ["Lisovskiy <you@example.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.9"
+fastapi = "^0.65.2"
+SQLAlchemy = "^1.4.19"
+asyncpg = "^0.23.0"
+python-dotenv = "^0.18.0"
+psycopg2 = "^2.9.1"
+alembic = "^1.6.5"
+uvicorn = "^0.14.0"
 
 [tool.poetry.dev-dependencies]
+
+[tool.poetry.scripts]
+build_ep = 'build_ep.build_ep:build_ep'
+
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]

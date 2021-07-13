@@ -1,2 +1,6 @@
 /venv/
 .idea
+.env
+*.egg-info
+*node_modules*
+*dist*
