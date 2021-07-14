@@ -28,6 +28,6 @@
     "no-useless-return": "warn",
     "require-await": "warn",
     "no-shadow": "warn",
-    "array-bracket-spacing": "warn"
+    "array-bracket-spacing": "error"
   }
 }

@@ -6,7 +6,7 @@ export default class Counter extends React.Component {
   state = {
     count: 0
   };
-  hui: Array<number> = [123, ]
+  hui: Array<number> = [123,  ]
   increment = (): void => {
     this.setState({
       count: this.state.count + 1
