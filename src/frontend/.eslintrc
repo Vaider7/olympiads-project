@@ -9,5 +9,25 @@
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
-  ]
+  ],
+  "rules": {
+    "no-await-in-loop": "warn",
+    "no-console": "warn",
+    "no-extra-parens": "warn",
+    "no-promise-executor-return": "warn",
+    "no-unreachable-loop": "warn",
+    "array-element-newline": "warn",
+    "dot-notation": "warn",
+    "grouped-accessor-pairs": "warn",
+    "no-constructor-return": "warn",
+    "no-else-return": "warn",
+    "no-empty-function": "warn",
+    "no-lone-blocks": "warn",
+    "no-multi-spaces": "warn",
+    "no-return-await": "warn",
+    "no-useless-return": "warn",
+    "require-await": "warn",
+    "no-shadow": "warn",
+    "array-bracket-spacing": "warn"
+  }
 }

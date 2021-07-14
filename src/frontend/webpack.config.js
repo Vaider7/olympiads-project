@@ -20,18 +20,26 @@ module.exports = {
         use: {
           loader: 'babel-loader'
         }
-      }
+      },
+      {
+        test: /\.s[ac]ss$/i,
+        use: [
+          "style-loader",
+          "css-loader",
+          "sass-loader"
+        ],
+      },
     ]
   },
 
   resolve: {
-    extensions: [ '.tsx', '.ts', '.js' ]
+    extensions: ['.tsx', '.ts', '.js', '.scss']
   },
 
   // Setup plugin to use a HTML file for serving bundled js files
   plugins: [
     new HtmlWebpackPlugin({
-      template: './index.html'
+      template: './src/core/index.html'
     })
   ]
 }
