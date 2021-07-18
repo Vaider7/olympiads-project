@@ -1,9 +1,13 @@
-import {makeObservable, observable, computed, action} from "mobx";
+import {makeObservable, observable, action} from 'mobx';
 
-class CounterStore {
+export default class CounterStore {
   @observable currentTime = 0;
 
-  @action increment = () => {
+  constructor () {
+    makeObservable(this);
+  }
+
+  @action increment = (): void => {
     this.currentTime += 1;
   }
 }
