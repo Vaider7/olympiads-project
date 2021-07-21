@@ -4,11 +4,12 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
 
 module.exports = {
+  mode: 'development',
   entry: './src/core/app.tsx',
 
   output: {
     path: path.resolve(__dirname, '../assets'),
-    filename: 'js/[name].js',
+    filename: 'js/[name].js'
   },
 
   module: {

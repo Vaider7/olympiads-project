@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack --mode production --config webpack/webpack.config.js",
-    "dev": "webpack serve --mode development",
+    "dev": "webpack --watch --mode development --config webpack/webpack.config.js",
     "lint": "eslint *.tsx --ext .ts"
   },
   "author": "",
@@ -14,6 +14,7 @@
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "css-modules-typescript-loader": "^4.0.1",
     "mobx": "^6.3.2",
+    "mobx-react": "^7.2.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^5.2.0"
@@ -30,7 +31,6 @@
     "@typescript-eslint/parser": "^4.28.3",
     "babel-core": "^6.26.3",
     "babel-loader": "^8.2.2",
-    "chokidar": "^3.5.2",
     "css-loader": "^5.2.6",
     "eslint": "^7.30.0",
     "eslint-plugin-react": "^7.24.0",

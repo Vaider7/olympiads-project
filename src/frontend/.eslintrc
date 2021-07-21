@@ -10,6 +10,12 @@
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
+  "env": {
+    "browser": true,
+    "commonjs": true,
+    "es6": true,
+    "node": true
+  },
   "rules": {
     "no-await-in-loop": "warn",
     "no-console": "warn",
@@ -72,7 +78,7 @@
     "space-unary-ops": ["warn", {"words": true, "nonwords": false}],
     "switch-colon-spacing": "warn",
     "template-tag-spacing": "warn",
-    "arrow-body-style": ["warn", "always"],
+    "arrow-body-style": "warn",
     "arrow-parens": "warn",
     "arrow-spacing": "warn",
     "generator-star-spacing": ["warn", {"before": true, "after": true}],
@@ -93,6 +99,7 @@
     "symbol-description": "warn",
     "template-curly-spacing": "warn",
     "yield-star-spacing": ["warn", {"before": true, "after": true}],
+
     "react/boolean-prop-naming": "warn",
     "react/function-component-definition": ["warn", {
       "namedComponents": "arrow-function",
@@ -109,7 +116,6 @@
     "react/prefer-es6-class": ["warn", "always"],
     "react/prefer-stateless-function": "warn",
     "react/self-closing-comp": "warn",
-    "react/sort-comp": "warn",
     "react/void-dom-elements-no-children": "warn",
     "react/jsx-boolean-value": ["warn", "always"],
     "react/jsx-child-element-spacing": "warn",
