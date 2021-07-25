@@ -10,7 +10,6 @@ export default class CounterStore {
 
   @action increment = (): void => {
     this.currentTime += 1;
-    console.log('hui');
   }
 
   @action newAction = (): string => '123'

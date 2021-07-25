@@ -1,7 +1,7 @@
 import {MobXProviderContext, ProviderProps} from 'mobx-react';
-import React, {ReactComponentElement, ReactElement, ReactNode} from 'react';
+import React, {ReactElement} from 'react';
 
-const Provider = (props: ProviderProps): JSX.Element => {
+const Provider = (props: ProviderProps): ReactElement => {
   const {
     children,
     ...stores
