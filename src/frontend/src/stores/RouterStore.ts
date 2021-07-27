@@ -11,9 +11,9 @@ export default class RouterStore {
   }
 
   @action setRoute<K extends RouteComponentProps> (
-    location: K,
-    match: match,
-    history: History
+    location: K['location'],
+    match: K['match'],
+    history: K['history']
   ): void {
     this.location = location;
     this.match = match;

@@ -1,6 +1,6 @@
 import loadable from '@loadable/component';
+import React from 'react';
 
-const AsyncLoader = loadable((props: {pathToPage: string}) => import(`./${props.pathToPage}`),
-  {cacheKey: (props) => props.pathToPage});
+const AsyncLoader = loadable((props: {pathToPage: string}) => import(`../components/${props.pathToPage}`));
 
-export default AsyncLoader;
+export default React.memo(AsyncLoader);
