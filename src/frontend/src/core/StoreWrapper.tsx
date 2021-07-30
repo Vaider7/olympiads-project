@@ -1,15 +1,12 @@
 import React from 'react';
 import {MobXProviderContext} from 'mobx-react';
-import {IRouterStore} from '../stores/types';
+import {IRouterStore, IStoreWrapperProps} from '../types';
 import {RouteComponentProps} from 'react-router';
 import AsyncLoader from './LoadableComponents';
-
-interface IProps {
-  pathToFile: string
-}
+import ErrorBoundary from './ErrorBoundary';
 
 
-class StoreWrapper extends React.Component<RouteComponentProps & IProps> {
+class StoreWrapper extends React.Component<RouteComponentProps & IStoreWrapperProps> {
   static contextType = MobXProviderContext;
   RouterStore: IRouterStore = this.context.RouterStore;
 
@@ -30,7 +27,11 @@ class StoreWrapper extends React.Component<RouteComponentProps & IProps> {
   }
 
   render (): React.ReactNode {
-    return <AsyncLoader pathToPage={this.props.pathToFile} />;
+    return (
+      <ErrorBoundary>
+        <AsyncLoader pathToPage={this.props.pathToFile} />
+      </ErrorBoundary>
+    );
   }
 }
 

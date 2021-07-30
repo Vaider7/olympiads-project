@@ -4,4 +4,8 @@ interface IRouterStore {
   setRoute: <T extends RouteComponentProps>(location: T['location'], match: T['match'], history: T['history']) => void
 }
 
-export {IRouterStore};
+interface IStoreWrapperProps {
+  pathToFile: string
+}
+
+export {IRouterStore, IStoreWrapperProps};

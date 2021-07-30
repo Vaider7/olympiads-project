@@ -127,6 +127,24 @@
     "react/jsx-first-prop-new-line": "warn",
     "react/jsx-indent": ["warn", 2, {"checkAttributes": true, "indentLogicalExpressions": true}],
     "react/jsx-indent-props": ["warn", 2],
-    "react/jsx-max-props-per-line": ["warn", {"maximum": 1, "when": "multiline"}]
+    "react/jsx-max-props-per-line": ["warn", {"maximum": 1, "when": "multiline"}],
+    "react/jsx-no-bind": ["warn", {
+      "ignoreDOMComponents": false,
+      "ignoreRefs": true,
+      "allowArrowFunctions": true,
+      "allowFunctions": false,
+      "allowBind": false
+    }],
+    "react/jsx-no-literals": ["warn", {"noStrings": false, "allowedStrings": ["allowed"], "ignoreProps": false, "noAttributeStrings": true }],
+    "react/jsx-no-script-url": "warn",
+    "react/jsx-no-useless-fragment": "warn",
+    "react/jsx-one-expression-per-line": "warn",
+    "react/jsx-pascal-case": "warn",
+    "react/jsx-props-no-multi-spaces": "warn",
+    "react/jsx-space-before-closing": "warn",
+    "@typescript-eslint/adjacent-overload-signatures": "warn",
+    "@typescript-eslint/array-type": ["warn", {"arrayOption": "array-simple"}],
+    "@typescript-eslint/class-literal-property-style": "warn",
+    "@typescript-eslint/consistent-indexed-object-style": "warn"
   }
 }

@@ -22,7 +22,8 @@ const Routes: React.FunctionComponent = () =>
     <Router>
       <Switch>
         <Route
-          path={'/'} render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'Index/Index'} />}
+          path={'/'}
+          render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'Index/Index'} />}
         />
       </Switch>
     </Router>
