@@ -4,12 +4,20 @@
   "plugins": [
     "@typescript-eslint"
   ],
+  "parserOptions": {
+    "project": "./tsconfig.json"
+  },
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
     "plugin:@typescript-eslint/eslint-recommended",
     "plugin:@typescript-eslint/recommended"
   ],
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
   "env": {
     "browser": true,
     "commonjs": true,
@@ -138,13 +146,56 @@
     "react/jsx-no-literals": ["warn", {"noStrings": false, "allowedStrings": ["allowed"], "ignoreProps": false, "noAttributeStrings": true }],
     "react/jsx-no-script-url": "warn",
     "react/jsx-no-useless-fragment": "warn",
-    "react/jsx-one-expression-per-line": "warn",
+    "react/jsx-one-expression-per-line": ["warn", {"allow": "literal"}],
     "react/jsx-pascal-case": "warn",
     "react/jsx-props-no-multi-spaces": "warn",
-    "react/jsx-space-before-closing": "warn",
+    "react/jsx-tag-spacing": "warn",
     "@typescript-eslint/adjacent-overload-signatures": "warn",
     "@typescript-eslint/array-type": ["warn", {"arrayOption": "array-simple"}],
     "@typescript-eslint/class-literal-property-style": "warn",
-    "@typescript-eslint/consistent-indexed-object-style": "warn"
+    "@typescript-eslint/consistent-indexed-object-style": "warn",
+    "@typescript-eslint/consistent-type-assertions": "warn",
+    "@typescript-eslint/consistent-type-definitions": "warn",
+    "@typescript-eslint/explicit-member-accessibility": ["warn", {"accessibility": "no-public"}],
+    "@typescript-eslint/member-delimiter-style": ["warn", {
+      "multiline": {
+        "delimiter": "comma",
+        "requireLast": false
+      },
+      "singleline": {
+        "delimiter": "comma",
+        "requireLast": false
+      },
+      "multilineDetection": "brackets"
+    }],
+    "@typescript-eslint/method-signature-style": "warn",
+    "@typescript-eslint/naming-convention": ["warn",
+      {
+        "selector": ["memberLike", "method"],
+        "format": ["camelCase"]
+      },
+      {
+        "selector": "typeLike",
+        "format": ["PascalCase"]
+      },
+      {
+        "selector": ["property", "variableLike"],
+        "format": ["PascalCase", "camelCase"]
+      }
+    ],
+    "@typescript-eslint/no-confusing-void-expression": "warn",
+    "@typescript-eslint/no-extraneous-class": "warn",
+    "@typescript-eslint/no-implicit-any-catch": "warn",
+    "@typescript-eslint/no-invalid-void-type": "warn",
+    "@typescript-eslint/no-type-alias": "warn",
+    "@typescript-eslint/no-unnecessary-condition": "warn",
+    "@typescript-eslint/no-unnecessary-qualifier": "warn",
+    "@typescript-eslint/no-unnecessary-type-arguments": "warn",
+    "@typescript-eslint/no-unnecessary-type-constraint": "warn",
+    "@typescript-eslint/no-unsafe-argument": "warn",
+    "@typescript-eslint/non-nullable-type-assertion-style": "warn",
+    "@typescript-eslint/prefer-for-of": "warn",
+    "@typescript-eslint/prefer-function-type": "warn",
+    "@typescript-eslint/prefer-includes": "warn"
   }
 }

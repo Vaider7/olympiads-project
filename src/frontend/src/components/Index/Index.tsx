@@ -6,13 +6,13 @@ import {observer, MobXProviderContext} from 'mobx-react';
 
 
 interface IProps {
-  headerClass: string
+  headerClass: string,
   arr: number[]
 }
 
 interface ICounterStore {
-  increment: () => void
-  readonly currentTime: number
+  increment: () => void,
+  readonly currentTime: number,
   newAction: () => string
 }
 
@@ -24,7 +24,7 @@ export default class Index extends React.Component<IProps> {
 
   render (): ReactNode {
     return (
-      <div>
+      <React.Component>
         <h1 className={this.props.headerClass}>
           {this.CounterStore.currentTime}
         </h1>
@@ -32,7 +32,7 @@ export default class Index extends React.Component<IProps> {
           Just some text
         </button>
         {/*<button onClick={this.decrement}>Decrement</button>*/}
-      </div>
+      </React.Component>
     );
   }
 }

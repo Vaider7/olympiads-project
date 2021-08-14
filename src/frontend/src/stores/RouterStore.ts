@@ -21,7 +21,7 @@ export default class RouterStore {
   }
 
   @action getParams = (param: string): string | null => {
-    const search = get(this.location, 'search');
+    const search: string = get(this.location, 'search');
 
     const urlAddress = new URLSearchParams(search);
 
