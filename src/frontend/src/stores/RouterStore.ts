@@ -1,7 +1,8 @@
 import {observable, get, action, makeObservable} from 'mobx';
 import {RouteComponentProps} from 'react-router';
+import {IRouterStore} from '../types';
 
-export default class RouterStore {
+export default class RouterStore implements IRouterStore {
   @observable location = {};
   @observable match = {};
   history = {};
@@ -10,11 +11,11 @@ export default class RouterStore {
     makeObservable(this);
   }
 
-  @action setRoute<K extends RouteComponentProps> (
+  @action setRoute = <K extends RouteComponentProps> (
     location: K['location'],
     match: K['match'],
     history: K['history']
-  ): void {
+  ): void => {
     this.location = location;
     this.match = match;
     this.history = history;

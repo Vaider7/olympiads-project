@@ -6,7 +6,9 @@ import AsyncLoader from './LoadableComponents';
 import ErrorBoundary from './ErrorBoundary';
 
 
-class StoreWrapper extends React.Component<RouteComponentProps & IStoreWrapperProps> {
+interface IStoreWrapper extends RouteComponentProps, IStoreWrapperProps {}
+
+class StoreWrapper extends React.Component<IStoreWrapper> {
   static contextType = MobXProviderContext;
   RouterStore: IRouterStore = this.context.RouterStore;
 

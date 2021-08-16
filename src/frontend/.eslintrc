@@ -73,6 +73,7 @@
       "case",
       "export"
     ]}],
+    "prefer-destructuring": "warn",
     "prefer-exponentiation-operator": "warn",
     "quote-props": ["warn", "as-needed"],
     "quotes": ["warn", "single"],

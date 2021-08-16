@@ -19,19 +19,22 @@ interface ICounterStore {
 @observer
 export default class Index extends React.Component<IProps> {
   static contextType = MobXProviderContext;
-
   readonly CounterStore: ICounterStore = this.context.CounterStore;
 
   render (): ReactNode {
+
+    const {headerClass} = this.props;
+
+    const {increment, currentTime} = this.CounterStore;
+
     return (
       <React.Component>
-        <h1 className={this.props.headerClass}>
-          {this.CounterStore.currentTime}
+        <h1 className={headerClass}>
+          {currentTime}
         </h1>
-        <button onClick={this.CounterStore.increment} className={style.default.some}>
+        <button onClick={increment} className={style.default.some}>
           Just some text
         </button>
-        {/*<button onClick={this.decrement}>Decrement</button>*/}
       </React.Component>
     );
   }
