@@ -4,12 +4,6 @@ import * as style from './Index.scss';
 import {ReactNode} from 'react';
 import {observer, MobXProviderContext} from 'mobx-react';
 
-
-interface IProps {
-  headerClass: string,
-  arr: number[]
-}
-
 interface ICounterStore {
   increment: () => void,
   readonly currentTime: number,
@@ -17,25 +11,23 @@ interface ICounterStore {
 }
 
 @observer
-export default class Index extends React.Component<IProps> {
+export default class Index extends React.Component {
   static contextType = MobXProviderContext;
   readonly CounterStore: ICounterStore = this.context.CounterStore;
 
   render (): ReactNode {
 
-    const {headerClass} = this.props;
-
     const {increment, currentTime} = this.CounterStore;
 
     return (
-      <React.Component>
-        <h1 className={headerClass}>
+      <React.Fragment>
+        <h1 className={'Test'}>
           {currentTime}
         </h1>
         <button onClick={increment} className={style.default.some}>
-          Just some text
+          Увеличитель
         </button>
-      </React.Component>
+      </React.Fragment>
     );
   }
 }

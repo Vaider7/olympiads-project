@@ -1,0 +1,33 @@
+.headerWrapper {
+  width: 100%;
+  min-height: 48px;
+  border-bottom: 1px solid gray;
+  height: 48px;
+
+  .container {
+    display: flex;
+    max-width: 1440px;
+    margin: 0 auto;
+    height: 100%;
+
+    .tabsContainer {
+      display: flex;
+      justify-content: left;
+      height: 100%;
+
+      .tab {
+        display: flex;
+        justify-content: center;
+        align-content: center;
+        align-items: center;
+        height: 100%;
+        padding: 0 8px;
+      }
+    }
+  }
+
+  .knopka {
+    background-color: aqua;
+    border-radius: 100px;
+  }
+}
