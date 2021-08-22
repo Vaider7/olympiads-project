@@ -1,7 +1,6 @@
 import React, {ReactNode} from 'react';
 import {observer} from 'mobx-react';
 import * as style from './Header.scss';
-import Button from '@material-ui/core/Button';
 
 @observer
 export default class Header extends React.Component {
@@ -16,7 +15,6 @@ export default class Header extends React.Component {
             <a href={'/gavno'} className={style.default.tab}>Что-то</a>
           </div>
         </div>
-        <Button className={style.default.knopka}>Здарова лохи</Button>
       </div>
     );
   }
