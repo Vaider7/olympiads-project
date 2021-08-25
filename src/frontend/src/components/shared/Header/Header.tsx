@@ -1,18 +1,21 @@
 import React, {ReactNode} from 'react';
 import {observer} from 'mobx-react';
-import * as style from './Header.scss';
+import * as s from './Header.scss';
+import {Link} from 'react-router-dom';
+
 
 @observer
 export default class Header extends React.Component {
 
   render (): ReactNode {
+
     return (
-      <div className={style.default.headerWrapper}>
-        <div className={style.default.container}>
-          <div className={style.default.tabsContainer}>
-            <a href={'/'} className={style.default.tab}>Олимпиады</a>
-            <a href={'/archive'} className={style.default.tab}>Архив</a>
-            <a href={'/gavno'} className={style.default.tab}>Что-то</a>
+      <div className={s.default.headerWrapper}>
+        <div className={s.default.container}>
+          <div className={s.default.tabsContainer}>
+            <Link to={'/'} className={s.default.tab}>Олимпиады</Link>
+            <Link to={'/archive'} className={s.default.tab}>Архив</Link>
+            <Link to={'/gavno'} className={s.default.tab}>Что-то</Link>
           </div>
         </div>
       </div>

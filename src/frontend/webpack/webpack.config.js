@@ -48,7 +48,8 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: './src/html/app.html',
       inject: 'head',
-      filename: 'html/app.html'
+      filename: 'html/app.html',
+      publicPath: './assets'
     }),
 
     new CleanWebpackPlugin({

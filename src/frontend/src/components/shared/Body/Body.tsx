@@ -1,6 +1,7 @@
 import React, {ReactNode} from 'react';
 import Header from '../Header/Header';
 import {observer} from 'mobx-react';
+import './Body.scss';
 
 @observer
 export default class Body extends React.Component<{children: ReactNode}> {

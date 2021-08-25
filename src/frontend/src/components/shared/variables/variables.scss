@@ -15,3 +15,27 @@ $danger-200: #DE162A;
 $danger-300: #B81223;
 
 $warning-100: #F79319;
+
+$success-100: #63DE0B;
+$success-200: #58C40A;
+
+
+$font-family: 'Roboto', 'PT Sans', helvetica, arial, sans-serif;
+
+$gray-700: #373745;
+$gray-500: #67676f;
+$gray-400: #898993;
+$gray-100: #dcdcdf;
+$gray-50: #f7f7f7;
+$white: #fff;
+
+
+$box-shadow-stone: 0 2px 6px rgba($primary-500, .1);
+$box-shadow-vitalik: 0 4px 20px rgba($primary-500, .09);
+$box-shadow-cloud: 0 16px 40px rgba($primary-500, .12);
+$box-shadow: 0 9px 24px rgba($primary-500, .14);
+$box-shadow-blue: 0 0 4px rgba(0, 145, 234, .5);
+$box-shadow-top-line: inset 0 1px 0 $primary-400;
+$box-shadow-bottom-line: inset 0 -1px 0 $primary-400;
+$box-shadow-bottom: 0 1px 0 $primary-400;
+$box-shadow-full: inset 0 0 10px $primary-400;

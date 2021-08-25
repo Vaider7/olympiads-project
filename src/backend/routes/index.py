@@ -1,11 +1,12 @@
 import os
+from fastapi.responses import HTMLResponse
 
 from . import router
 
 
-@router.get('/')
+@router.get('/', response_class=HTMLResponse)
 async def index():
-    return 'hello world!'
+    return router.front
 
 
 def add_route(app):

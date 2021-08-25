@@ -22,9 +22,13 @@ const Routes: React.FunctionComponent = () =>
     <Router>
       <Switch>
         <Route
+          exact={true}
           path={'/'}
           render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'IndexView'} />}
         />
+        <Route>
+          <div>404 хуета</div>
+        </Route>
       </Switch>
     </Router>
   </Provider>;

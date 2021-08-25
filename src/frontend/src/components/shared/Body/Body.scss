@@ -1,0 +1,29 @@
+@import '../variables/variables';
+
+a {
+  text-decoration: none !important;
+
+  &:hover {
+    text-decoration: none !important;
+  }
+
+  &:visited {
+    color: $main-300
+  }
+}
+
+body {
+  font-size: 14px;
+  font-family: $font-family;
+  letter-spacing: .25px;
+  margin: 0;
+  padding: 0;
+}
+
+:focus {
+  outline: none !important;
+}
+
+::-moz-focus-inner {
+  border: 0 !important;
+}
