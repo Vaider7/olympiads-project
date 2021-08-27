@@ -27,7 +27,7 @@ const Routes: React.FunctionComponent = () =>
           render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'IndexView'} />}
         />
         <Route>
-          <div>404 хуета</div>
+          <div>404</div>
         </Route>
       </Switch>
     </Router>

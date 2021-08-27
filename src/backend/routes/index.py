@@ -6,7 +6,7 @@ from . import router
 
 @router.get('/', response_class=HTMLResponse)
 async def index():
-    return router.front
+    return router.get_front()
 
 
 def add_route(app):
