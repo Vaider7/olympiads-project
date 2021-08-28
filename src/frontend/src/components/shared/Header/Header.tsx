@@ -13,7 +13,7 @@ export default class Header extends React.Component {
       <div className={s.default.headerWrapper}>
         <div className={s.default.container}>
           <div className={s.default.tabsContainer}>
-            <Link to={'/'} className={s.default.tab}>Олимпиsssады</Link>
+            <Link to={'/'} className={s.default.tab}>Олимпиады</Link>
             <Link to={'/archive'} className={s.default.tab}>Архив</Link>
             <Link to={'/gavno'} className={s.default.tab}>Что-то</Link>
           </div>

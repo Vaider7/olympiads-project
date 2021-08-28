@@ -1,4 +1,3 @@
-import os
 from fastapi.responses import HTMLResponse
 
 from . import router

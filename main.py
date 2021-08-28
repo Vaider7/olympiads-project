@@ -1,9 +1,11 @@
 import uvicorn
 
 from configs.project_variables import *
-from build_ep.load_routes import load_routes
+from loaders.load_routes import load_routes
+from loaders.load_middlewares import load_middlewares
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
+
 
 app = FastAPI()
 app.mount('/assets', StaticFiles(directory='src/frontend/assets'), name='assets')
@@ -11,6 +13,7 @@ app.mount('/assets', StaticFiles(directory='src/frontend/assets'), name='assets'
 
 def get_app():
     load_routes(app)
+    load_middlewares(app)
     return app
 
 

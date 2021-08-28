@@ -1,20 +1,19 @@
+from os import getenv
 from sqlalchemy import create_engine
-
-from dotenv import dotenv_values
+from configs.project_variables import *
 
 from alembic import context
 
 from src.backend.models import Base
-from build_ep.load_models import load_models
+from loaders.load_models import load_models
 
 load_models()
 target_metadata = Base.metadata
 
-env = dotenv_values()
 
-if env['ENV'] == 'development':
+if getenv('ENV') == 'development':
     from configs.db_config import DevConf as Conf
-elif env['ENV'] == 'production':
+elif getenv('ENV') == 'production':
     from configs.db_config import ProdConf as Conf
 
 
