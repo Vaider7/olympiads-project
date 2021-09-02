@@ -3,6 +3,7 @@ import * as React from 'react';
 import * as style from './Index.scss';
 import {ReactNode} from 'react';
 import {observer, MobXProviderContext} from 'mobx-react';
+import {Button} from '@material-ui/core';
 
 
 interface ICounterStore {
@@ -21,9 +22,9 @@ export default class Index extends React.Component {
     const {increment, currentTime} = this.CounterStore;
 
     return (
-      <React.Fragment>
+      <Button>
         Hui
-      </React.Fragment>
+      </Button>
     );
   }
 }

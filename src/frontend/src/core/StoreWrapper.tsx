@@ -8,7 +8,7 @@ import ErrorBoundary from './ErrorBoundary';
 
 interface IStoreWrapper extends RouteComponentProps, IStoreWrapperProps {}
 
-class StoreWrapper extends React.Component<IStoreWrapper> {
+export default class StoreWrapper extends React.Component<IStoreWrapper> {
   static contextType = MobXProviderContext;
   RouterStore: IRouterStore = this.context.RouterStore;
 
@@ -36,5 +36,3 @@ class StoreWrapper extends React.Component<IStoreWrapper> {
     );
   }
 }
-
-export default StoreWrapper;
