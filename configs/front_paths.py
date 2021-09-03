@@ -1,0 +1,4 @@
+front_paths = [
+    '/',
+    '/{name}'
+]
