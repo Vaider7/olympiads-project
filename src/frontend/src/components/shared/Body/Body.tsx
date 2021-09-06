@@ -1,7 +1,7 @@
 import React, {ReactNode} from 'react';
 import Header from '../Header/Header';
 import {observer} from 'mobx-react';
-import './Body.scss';
+import {default as s} from './Body.scss';
 
 @observer
 export default class Body extends React.Component<{children: ReactNode}> {
@@ -9,12 +9,12 @@ export default class Body extends React.Component<{children: ReactNode}> {
     const {children} = this.props;
 
     return (
-      <div className={'body'}>
+      <React.Fragment>
         <Header />
-        <div className={'page'}>
+        <div className={s.page}>
           {children}
         </div>
-      </div>
+      </React.Fragment>
     );
   }
 }

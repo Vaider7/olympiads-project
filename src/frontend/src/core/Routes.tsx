@@ -26,8 +26,13 @@ const Routes: React.FunctionComponent = () =>
           path={'/'}
           render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'IndexView'} />}
         />
+        <Route
+          exact={true}
+          path={'/teacher'}
+          render={(props: RouteComponentProps) => <StoreWrapper {...props} pathToFile={'TeacherView'} />}
+        />
         <Route>
-          <div>404</div>
+          <div>404. Добавь страницу, гений</div>
         </Route>
       </Switch>
     </Router>
