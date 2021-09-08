@@ -12,4 +12,9 @@ interface IStoreWrapperProps {
   pathToFile: string
 }
 
-export {IRouterStore, IStoreWrapperProps};
+interface IAuthStore {
+  pageState: string,
+  togglePage: () => void
+}
+
+export {IRouterStore, IStoreWrapperProps, IAuthStore};

@@ -1,8 +1,8 @@
 import Body from '../components/shared/Body/Body';
-import React, {ReactNode} from 'react';
+import React from 'react';
 import Teacher from '../components/Teacher/Teacher';
 
-const TeacherView = (): ReactNode =>
+const TeacherView = (): JSX.Element =>
   <Body>
     <Teacher />
   </Body>;

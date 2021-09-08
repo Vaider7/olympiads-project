@@ -1,8 +1,8 @@
 import Index from '../components/Index/Index';
 import Body from '../components/shared/Body/Body';
-import React, {ReactNode} from 'react';
+import React from 'react';
 
-const IndexView = (): ReactNode =>
+const IndexView = (): JSX.Element =>
   <Body>
     <Index />
   </Body>;

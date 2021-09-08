@@ -17,7 +17,7 @@ export default class Header extends React.Component {
             <Link to={'/teacher'} className={s.tab}>Преподавателю</Link>
           </div>
           <div>
-            <Link to={'/auth'} className={s.tab}>Войти</Link>
+            <Link to={'/auth'} className={s.tab}>Вход</Link>
           </div>
         </div>
       </div>
