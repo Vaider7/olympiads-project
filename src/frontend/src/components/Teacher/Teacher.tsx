@@ -1,7 +1,6 @@
 import React from 'react';
-import {Button} from '@material-ui/core';
+import Button from '../shared/Button/Button';
 import {default as s} from './Teacher.scss';
-
 
 const Teacher = (): JSX.Element =>
   <div className={s.buttonContainer}>

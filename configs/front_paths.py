@@ -1,5 +1,5 @@
 front_paths = [
     '/',
-    '/{name}',
-    '/teacher'
+    '/teacher',
+    '/auth'
 ]

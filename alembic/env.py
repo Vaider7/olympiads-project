@@ -1,12 +1,13 @@
 from os import getenv
 from sqlalchemy import create_engine
-from configs.project_variables import *
+from configs.project_variables import init_project_variables
 
 from alembic import context
 
 from src.backend.models import Base
 from loaders.load_models import load_models
 
+init_project_variables()
 load_models()
 target_metadata = Base.metadata
 

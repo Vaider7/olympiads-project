@@ -10,12 +10,10 @@ export default class Body extends React.Component<{children: ReactNode, excludeH
 
     if (!excludeHeader) {
       return (
-        <React.Fragment>
+        <div className={s.page}>
           <Header />
-          <div className={s.page}>
-            {children}
-          </div>
-        </React.Fragment>
+          {children}
+        </div>
       );
     }
 

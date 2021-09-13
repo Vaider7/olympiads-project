@@ -2,8 +2,8 @@ from starlette.config import Config
 
 
 class DevConf:
-    DB_USER = 'vaider'
-    DB_PASSWD = ''
+    DB_USER = 'vaider7'
+    DB_PASSWD = 'a44668631'
     DB_HOST = 'localhost'
     DB_PORT = 5432
     DB_DATABASE = 'olympiads'

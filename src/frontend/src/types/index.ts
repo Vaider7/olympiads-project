@@ -1,4 +1,5 @@
 import {RouteComponentProps} from 'react-router';
+import {ChangeEvent} from 'react';
 
 interface IRouterStore {
   setRoute: <T extends RouteComponentProps>(location: T['location'], match: T['match'], history: T['history']) => void,
@@ -14,7 +15,14 @@ interface IStoreWrapperProps {
 
 interface IAuthStore {
   pageState: string,
-  togglePage: () => void
+  togglePage: () => void,
+  recordLoginData: (e: ChangeEvent<HTMLInputElement>) => void,
+  sendLogin: () => void,
+  recordSignupData: (e: ChangeEvent<HTMLInputElement>) => void,
+  sendSignup: () => void,
+  wrongSignupData: Record<string, boolean | string>,
+  wrongLoginData: Record<string, boolean | string>
 }
+
 
 export {IRouterStore, IStoreWrapperProps, IAuthStore};

@@ -1,0 +1,18 @@
+@import '../variables/variables';
+
+.wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  background-color: $white;
+  justify-content: center;
+  align-items: center;
+
+  .loader {
+    color: $main-100;
+    z-index: 20;
+  }
+}

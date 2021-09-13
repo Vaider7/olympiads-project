@@ -13,12 +13,14 @@ a {
 }
 
 body {
+  overflow-x: hidden;
   font-size: 14px;
   font-family: $font-family;
   letter-spacing: .25px;
   line-height: 1.6;
   margin: 0;
   padding: 0;
+  box-sizing: border-box;
 }
 
 :focus {
@@ -30,6 +32,6 @@ body {
 }
 
 .page {
-  width: 1140px;
-  margin: 0 auto;
+  height: 100vh;
+  width: 100vw;
 }

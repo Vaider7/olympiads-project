@@ -8,11 +8,12 @@ export default class ErrorBoundary extends React.Component<{children: ReactNode}
     return {hasError: true};
   }
 
-  render (): React.ReactNode {
+  render (): ReactNode {
     if (this.state.hasError) {
       return (
         <div>
-          Что-то пошло по пизде. Чекай консоль
+          Произошла ошибка.
+          Обновите странцицу или повторите попытку позднее
         </div>
       );
     }
