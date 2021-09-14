@@ -5,7 +5,8 @@ import {default as s} from '../Auth.scss';
 import TextField from '../../shared/Inputs/TextField';
 import Button from '../../shared/Button/Button';
 import {Link} from 'react-router-dom';
-
+import {CircularProgress} from '@material-ui/core';
+import {Loading} from '../../../enums';
 
 @observer
 export default class Login extends React.Component {
@@ -18,7 +19,8 @@ export default class Login extends React.Component {
       wrongLoginData,
       recordLoginData,
       togglePage,
-      sendLogin
+      sendLogin,
+      loadingStatus
     } = this.AuthStore;
 
     return (
@@ -53,7 +55,9 @@ export default class Login extends React.Component {
               className={s.input}
               onClick={sendLogin}
             >
-              Войти
+              {loadingStatus === Loading.IN_PROGRESS ?
+                <CircularProgress thickness={1} className={s.progress} /> : 'Войти'}
+
             </Button>
           </form>
           <div className={s.bottom}>

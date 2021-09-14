@@ -60,6 +60,7 @@ module.exports = {
   ],
 
   optimization: {
+    runtimeChunk: true,
     removeAvailableModules: true,
     splitChunks: {
       chunks: 'all'

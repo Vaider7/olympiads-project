@@ -57,12 +57,19 @@
       }
     }
 
+    .progress {
+      height: 30px !important;
+      width: 30px !important;
+      color: $white;
+    }
+
     .bottom {
       width: 100%;
       max-width: 280px;
       flex-direction: row;
       display: flex;
       justify-content: space-between;
+
     }
   }
 }

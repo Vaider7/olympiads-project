@@ -1,7 +1,8 @@
-import {action, makeObservable, observable, toJS} from 'mobx';
+import {action, makeObservable, observable} from 'mobx';
 import {IAuthStore} from '../types';
 import {ChangeEvent} from 'react';
 import axios from 'axios';
+import {Loading} from '../enums';
 
 export default class AuthStore implements IAuthStore {
   @observable pageState = 'login';
@@ -31,6 +32,8 @@ export default class AuthStore implements IAuthStore {
     passwordAgain: false,
     passwordAgainText: ''
   }
+
+  @observable loadingStatus = Loading.WAITING;
 
   // eslint-disable-next-line max-len
   emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -87,10 +90,19 @@ export default class AuthStore implements IAuthStore {
       return;
     }
 
+    this.loadingStatus = Loading.IN_PROGRESS;
+
     const result = await axios.post(
       '/api/auth/login',
       this.loginData
     );
+
+
+    if (result.status === 200) {
+      this.loadingStatus = Loading.SUCCESS;
+    } else {
+      this.loadingStatus = Loading.ERROR;
+    }
   }
 
 
@@ -172,7 +184,7 @@ export default class AuthStore implements IAuthStore {
 
     if (!this.signupData.passwordAgain) {
       someErr = true;
-
+      console.log('im broken here');
       this.wrongSignupData.passwordAgain = true;
       this.wrongSignupData.passwordAgainText = '';
     }

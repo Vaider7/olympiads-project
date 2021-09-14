@@ -182,6 +182,10 @@
       {
         "selector": ["property", "variableLike"],
         "format": ["PascalCase", "camelCase"]
+      },
+      {
+        "selector": "enumMember",
+        "format": ["UPPER_CASE"]
       }
     ],
     "@typescript-eslint/no-confusing-void-expression": "warn",
