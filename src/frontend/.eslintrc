@@ -210,7 +210,6 @@
     "@typescript-eslint/promise-function-async": "warn",
     "@typescript-eslint/require-array-sort-compare": "warn",
     "@typescript-eslint/sort-type-union-intersection-members": "warn",
-    "@typescript-eslint/strict-boolean-expressions": ["warn", {"allowNullableBoolean": true}],
     "@typescript-eslint/switch-exhaustiveness-check": "warn",
     "@typescript-eslint/type-annotation-spacing": "warn",
     "@typescript-eslint/unified-signatures": "warn",

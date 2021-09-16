@@ -20,7 +20,8 @@ export default class Login extends React.Component {
       recordLoginData,
       togglePage,
       sendLogin,
-      loadingStatus
+      loadingStatus,
+      errorText
     } = this.AuthStore;
 
     return (
@@ -55,7 +56,7 @@ export default class Login extends React.Component {
               className={s.input}
               onClick={sendLogin}
             >
-              {loadingStatus === Loading.IN_PROGRESS ?
+              {loadingStatus === Loading.PENDING ?
                 <CircularProgress thickness={1} className={s.progress} /> : 'Войти'}
 
             </Button>
@@ -66,6 +67,9 @@ export default class Login extends React.Component {
             </Link>
             <Button onClick={togglePage} variant={'text'}>Регистрация</Button>
           </div>
+          <p className={s.errorText}>
+            {errorText}
+          </p>
         </div>
       </div>
     );

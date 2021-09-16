@@ -22,7 +22,8 @@ interface IAuthStore {
   sendSignup: () => void,
   wrongSignupData: Record<string, boolean | string>,
   wrongLoginData: Record<string, boolean | string>,
-  loadingStatus: number
+  loadingStatus: number,
+  errorText: string
 }
 
 

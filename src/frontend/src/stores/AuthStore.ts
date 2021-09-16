@@ -1,7 +1,7 @@
 import {action, makeObservable, observable} from 'mobx';
 import {IAuthStore} from '../types';
 import {ChangeEvent} from 'react';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import {Loading} from '../enums';
 
 export default class AuthStore implements IAuthStore {
@@ -33,7 +33,9 @@ export default class AuthStore implements IAuthStore {
     passwordAgainText: ''
   }
 
-  @observable loadingStatus = Loading.WAITING;
+  @observable loadingStatus = Loading.DONE;
+
+  @observable errorText = '';
 
   // eslint-disable-next-line max-len
   emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
@@ -44,6 +46,8 @@ export default class AuthStore implements IAuthStore {
 
   @action togglePage = (): void => {
     this.pageState === 'login' ? this.pageState = 'signup' : this.pageState = 'login';
+    this.loadingStatus = Loading.DONE;
+    this.errorText = '';
   }
 
   @action recordLoginData = (e: ChangeEvent<HTMLInputElement>): void => {
@@ -90,18 +94,23 @@ export default class AuthStore implements IAuthStore {
       return;
     }
 
-    this.loadingStatus = Loading.IN_PROGRESS;
+    this.loadingStatus = Loading.PENDING;
 
-    const result = await axios.post(
-      '/api/auth/login',
-      this.loginData
-    );
+    try {
+      await axios.post(
+        '/api/auth/login',
+        this.loginData
+      );
+    } catch (e: unknown) {
+      this.changeLoadingStatus(Loading.ERROR);
 
+      const err = e as AxiosError;
 
-    if (result.status === 200) {
-      this.loadingStatus = Loading.SUCCESS;
-    } else {
-      this.loadingStatus = Loading.ERROR;
+      if (err.response) {
+        this.changeErrorText(err.response.data.detail as string);
+      } else if (err.request) {
+        this.changeErrorText('Ошибка при отправке запроса');
+      }
     }
   }
 
@@ -184,7 +193,7 @@ export default class AuthStore implements IAuthStore {
 
     if (!this.signupData.passwordAgain) {
       someErr = true;
-      console.log('im broken here');
+
       this.wrongSignupData.passwordAgain = true;
       this.wrongSignupData.passwordAgainText = '';
     }
@@ -193,16 +202,32 @@ export default class AuthStore implements IAuthStore {
       return;
     }
 
-    const result = await axios.post(
-      '/api/auth/signup',
-      this.signupData
-    );
+    this.loadingStatus = Loading.PENDING;
 
-    console.log(result);
+    try {
+      await axios.post(
+        '/api/auth/signup',
+        this.signupData
+      );
+      this.changeLoadingStatus(Loading.DONE);
+    } catch (e: unknown) {
+      this.changeLoadingStatus(Loading.ERROR);
+
+      const err = e as AxiosError;
+
+      if (err.response) {
+        this.changeErrorText(err.response.data.details as string);
+      } else if (err.request) {
+        this.changeErrorText('Ошибка при отправке запроса');
+      }
+    }
   }
 
-  // checkEmail = (target: ): boolean => {
-  //
-  // }
+  @action changeErrorText = (text: string): void => {
+    this.errorText = text;
+  }
 
+  @action changeLoadingStatus = <T extends Loading>(status: T): void => {
+    this.loadingStatus = status;
+  }
 }
