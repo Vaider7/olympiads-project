@@ -1,3 +1,5 @@
+import os
+
 import uvicorn
 
 from configs.project_variables import init_project_variables
@@ -6,13 +8,18 @@ from loaders.load_middlewares import load_middlewares
 from fastapi.staticfiles import StaticFiles
 from fastapi import FastAPI
 
+init_project_variables()
 
-app = FastAPI()
+if os.getenv('ENV') == 'development':
+    app = FastAPI()
+else:
+    app = FastAPI(docs_url=None, redoc_url=None)
+
+
 app.mount('/assets', StaticFiles(directory='src/frontend/assets'), name='assets')
 
 
 def get_app():
-    init_project_variables()
     load_routes(app)
     load_middlewares(app)
     return app

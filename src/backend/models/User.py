@@ -1,5 +1,5 @@
 from . import Base
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, LargeBinary
 
 
 class User(Base):
@@ -7,6 +7,6 @@ class User(Base):
 
     id: int = Column(Integer, primary_key=True)
     username: str = Column(String, nullable=False)
-    password: str = Column(String, nullable=False)
+    password: bytes = Column(LargeBinary, nullable=False)
     firstname: str = Column(String, nullable=False)
     lastname: str = Column(String, nullable=False)

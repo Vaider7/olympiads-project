@@ -93,10 +93,10 @@ export default class Login extends React.Component {
               <Button variant={'text'}>На главную</Button>
             </Link>
             <Button onClick={togglePage} variant={'text'}>Вход</Button>
-            <p className={s.errorText}>
-              {errorText}
-            </p>
           </div>
+          <p className={s.errorTextSingup}>
+            {errorText}
+          </p>
         </div>
       </div>
     );

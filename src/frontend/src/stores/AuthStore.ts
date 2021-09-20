@@ -96,11 +96,20 @@ export default class AuthStore implements IAuthStore {
 
     this.loadingStatus = Loading.PENDING;
 
+    const formData = new FormData();
+
+    formData.append('username', this.loginData.username);
+    formData.append('password', this.loginData.password);
+
     try {
-      await axios.post(
-        '/api/auth/login',
-        this.loginData
+      const result = await axios.post(
+        '/api/token',
+        formData
       );
+
+      this.changeLoadingStatus(Loading.DONE);
+      localStorage.setItem('access_token', result.data.access_token as string);
+      window.location.pathname = '/';
     } catch (e: unknown) {
       this.changeLoadingStatus(Loading.ERROR);
 
@@ -205,18 +214,19 @@ export default class AuthStore implements IAuthStore {
     this.loadingStatus = Loading.PENDING;
 
     try {
-      await axios.post(
-        '/api/auth/signup',
+      const result = await axios.post(
+        '/api/signup',
         this.signupData
       );
       this.changeLoadingStatus(Loading.DONE);
+      localStorage.setItem('access_token', result.data.access_token as string);
     } catch (e: unknown) {
       this.changeLoadingStatus(Loading.ERROR);
 
       const err = e as AxiosError;
 
       if (err.response) {
-        this.changeErrorText(err.response.data.details as string);
+        this.changeErrorText(err.response.data.detail as string);
       } else if (err.request) {
         this.changeErrorText('Ошибка при отправке запроса');
       }
@@ -227,7 +237,7 @@ export default class AuthStore implements IAuthStore {
     this.errorText = text;
   }
 
-  @action changeLoadingStatus = <T extends Loading>(status: T): void => {
+  @action changeLoadingStatus = (status: Loading): void => {
     this.loadingStatus = status;
   }
 }

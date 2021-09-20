@@ -14,7 +14,7 @@ def get_front():
 
 
 for path in front_paths:
-    @router.get(path, response_class=HTMLResponse)
+    @router.get(path, response_class=HTMLResponse, tags=['Front Pages'])
     async def front_page():
         return get_front()
 

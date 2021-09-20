@@ -3,7 +3,7 @@ import {MobXProviderContext, observer} from 'mobx-react';
 import {IAuthStore} from '../../types';
 import SignUp from './SignUp/SignUp';
 import Login from './Login/Login';
-
+import {EmojiObjectsOutlined} from '@material-ui/icons';
 
 @observer
 export default class Auth extends React.Component {
