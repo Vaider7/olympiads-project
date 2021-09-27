@@ -14,7 +14,7 @@ from db import async_session
 from .models.User import User
 
 if getenv('ENV') == 'development':
-    # SECRET_KEY: str = 'a6b583249f451b497117cd296070f2b9'
+    SECRET_KEY: str = 'a6b583249f451b497117cd296070f2b9'
     ALGORITHM = 'HS256'
     ACCESS_TOKEN_EXPIRE_MINUTES = os.getenv('ACCESS_TOKEN_EXPIRE_MINUTES')
 

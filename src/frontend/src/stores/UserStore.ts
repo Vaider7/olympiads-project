@@ -11,7 +11,10 @@ export default class UserStore {
   constructor () {
     makeObservable(this);
 
-    this.checkLogged();
+    if (localStorage.getItem('access_token')) {
+      this.checkLogged();
+    }
+    this.loadingStatus = Loading.DONE;
   }
 
   @action changeIsLogged = (value: boolean): void => {
