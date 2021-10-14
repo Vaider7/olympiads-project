@@ -1,9 +1,11 @@
-/venv/
+*venv*
 .idea
 .env
 *.egg-info
 *node_modules*
 *dist*
-/src/frontend/assets/js
-/src/frontend/assets/html
+/frontend/assets/js
+/frontend/assets/html
 *.scss.d.ts
+
+*.mypy_cache

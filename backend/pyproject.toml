@@ -1,0 +1,37 @@
+[tool.poetry]
+name = "olympiads_project"
+version = "0.1.0"
+description = "Olympiads project for the best University in the Universe"
+authors = ["Lisovskiy <lisovskiy@mailo.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+fastapi = "^0.70.0"
+SQLAlchemy = "^1.4.25"
+asyncpg = "^0.24.0"
+alembic = "^1.7.4"
+aiofiles = "^0.7.0"
+uvicorn = "^0.15.0"
+bcrypt = "^3.2.0"
+python-jose = {extras = ["cryptography"], version = "^3.3.0"}
+pydantic = {extras = ["email"], version = "^1.8.2"}
+python-multipart = "^0.0.5"
+psycopg = "^3.0"
+
+
+
+[tool.poetry.dev-dependencies]
+watchgod = "^0.7"
+flake8 = "^4.0.1"
+autoflake = "^1.4"
+isort = "^5.9.3"
+black = {extras = ["d"], version = "^21.9b0"}
+mypy = "^0.910"
+sqlalchemy2-stubs = "^0.0.2-alpha.17"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 121
