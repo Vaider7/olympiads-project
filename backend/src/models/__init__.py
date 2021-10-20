@@ -1,2 +1,3 @@
-from .user import User
 from .olympiad import Olympiad
+from .task import Task
+from .user import User

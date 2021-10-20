@@ -8,6 +8,7 @@ Model = TypeVar("Model", bound=Base)
 
 
 def set_attrs(obj: Model, args: BaseModel) -> Model:
-    for arg in args:
-        setattr(obj, arg[0], arg[1])
+    update_data = args.dict()
+    for field in update_data:
+        setattr(obj, field, update_data[field])
     return obj

@@ -1,6 +1,9 @@
 from datetime import datetime
+from typing import Optional
 
-from pydantic import BaseModel, Field, PositiveInt, NonNegativeInt
+from pydantic import BaseModel, Field, NonNegativeInt, PositiveInt
+
+from src.schemas.task import Task, TaskCreate
 
 
 class OlympiadBase(BaseModel):
@@ -12,7 +15,7 @@ class OlympiadBase(BaseModel):
 
 
 class OlympiadCreate(OlympiadBase):
-    pass
+    tasks: Optional[list[TaskCreate]] = None
 
 
 class OlympiadUpdate(OlympiadBase):
@@ -28,3 +31,7 @@ class OlympiadInDB(OlympiadBase):
 
 class Olympiad(OlympiadInDB):
     pass
+
+
+class OlympiadWithTasks(OlympiadInDB):
+    tasks: Optional[list[Task]] = None

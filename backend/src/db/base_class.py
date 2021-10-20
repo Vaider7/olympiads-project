@@ -1,10 +1,9 @@
 from datetime import datetime
 
+from pydantic import PositiveInt
 from sqlalchemy import Column, Integer
 from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.orm import Mapped, declared_attr
-
-from pydantic import PositiveInt
 
 
 @as_declarative()

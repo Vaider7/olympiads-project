@@ -1,5 +1,6 @@
 from typing import Optional
 
+from fastapi.encoders import jsonable_encoder
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -29,7 +30,8 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
     async def update_user(self, db: AsyncSession, *, db_obj: User, obj_in: UserUpdate) -> User:
         if obj_in.password:
             obj_in.password = get_password_hash(obj_in.password)  # type: ignore
-        set_attrs(db_obj, obj_in)
+        obj_data = jsonable_encoder(obj_in)
+        set_attrs(db_obj, obj_data)
         db.add(db_obj)
         await db.commit()
         return db_obj

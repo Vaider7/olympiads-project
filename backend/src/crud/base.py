@@ -1,6 +1,7 @@
 from datetime import datetime
 from typing import Generic, Optional, Type, TypeVar
 
+from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -23,13 +24,9 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
         """
         self.model = model
 
-    async def get(
-        self, db: AsyncSession, *, id: int, with_deleted: bool = False
-    ) -> Optional[ModelType]:
+    async def get(self, db: AsyncSession, *, id: int, with_deleted: bool = False) -> Optional[ModelType]:
         if not with_deleted:
-            stmt = select(self.model).where(
-                self.model.id == id, self.model.deletedAt == None
-            )
+            stmt = select(self.model).where(self.model.id == id, self.model.deletedAt == None)
         else:
             stmt = select(self.model).where(self.model.id == id)
         result = await db.execute(stmt)
@@ -45,17 +42,12 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
         with_deleted: bool = False,
     ) -> list[ModelType]:
         if not with_deleted:
-            stmt = (
-                select(self.model)
-                .where(self.model.deletedAt == None)
-                .offset(offset)
-                .limit(limit)
-            )
+            stmt = select(self.model).where(self.model.deletedAt == None).offset(offset).limit(limit)
         else:
             stmt = select(self.model).offset(offset).limit(limit)
         result = await db.execute(stmt)
 
-        return result.scalars().all()
+        return result.unique().scalars().all()
 
     async def update(
         self,
@@ -68,15 +60,14 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
             db_obj = await self.get(db, id=obj_in.id)  # type: ignore[attr-defined]
             if db_obj is None:
                 return None
-        set_attrs(db_obj, obj_in)
+        obj_data = jsonable_encoder(obj_in)
+        set_attrs(db_obj, obj_data)
         db.add(db_obj)
         await db.commit()
         return db_obj
 
     async def remove(self, db: AsyncSession, *, id: int) -> Optional[ModelType]:
-        stmt = select(self.model).filter(
-            self.model.id == id, self.model.deletedAt == None
-        )
+        stmt = select(self.model).filter(self.model.id == id, self.model.deletedAt == None)
         result = await db.execute(stmt)
         db_obj = result.scalar()
 

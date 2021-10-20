@@ -22,7 +22,18 @@ async def create_olympiad(
     - **end**: time of end of olympiad
     - **duration**: duration for one attempt
     """
-    await crud.olympiad.create(db, obj_in=olympiad_data)
+    if not olympiad_data.tasks:
+        await crud.olympiad.create(db, obj_in=olympiad_data)
+        return
+
+    tasks = olympiad_data.tasks.copy()
+    del olympiad_data.tasks
+    olympiad = await crud.olympiad.create(db, obj_in=olympiad_data)
+
+    for task in tasks:
+        task.olympiad_id = olympiad.id
+
+        await crud.task.create(db, obj_in=task)
 
     return
 
@@ -79,7 +90,7 @@ async def get_olympiads(*, db: AsyncSession = Depends(deps.get_db)) -> Any:
     return olympiads
 
 
-@router.get("/api/olympiads/{olympiad_id}", response_model=schemas.Olympiad)
+@router.get("/api/olympiads/{olympiad_id}", response_model=schemas.OlympiadWithTasks)
 async def get_olympiad(
     *,
     db: AsyncSession = Depends(deps.get_db),
