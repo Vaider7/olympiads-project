@@ -4,6 +4,7 @@ from pydantic import BaseSettings
 
 
 class Settings(BaseSettings):
+    ENV: str = "development"
     API_V1_STR: str = "localhost"
     SECRET_KEY: str = "DSwz3U2CodwKdNenRLRLMyT51YyFGlEZGQxSjwWxRl4"  # secrets.token_urlsafe(32)
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 60 * 24 * 30 * 6

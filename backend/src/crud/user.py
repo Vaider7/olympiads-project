@@ -7,6 +7,7 @@ from src.core.security import get_password_hash, verify_password
 from src.models.user import User
 from src.schemas.user import UserCreate, UserUpdate
 
+from ..utils import set_attrs
 from .base import CRUDBase
 
 
@@ -17,17 +18,6 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         user = result.scalar()
         return user
 
-    async def create(self, db: AsyncSession, user_data: UserCreate) -> User:
-        user = User(
-            username=user_data.username,
-            password=get_password_hash(user_data.password),
-            firstname=user_data.firstname,
-            lastname=user_data.lastname,
-        )
-        db.add(user)
-        await db.commit()
-        return user
-
     async def authenticate(self, db: AsyncSession, *, username: str, password: str) -> Optional[User]:
         user = await self.get_by_username(db, username=username)
         if not user:
@@ -35,6 +25,14 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         if not verify_password(password, user.password):
             return None
         return user
+
+    async def update_user(self, db: AsyncSession, *, db_obj: User, obj_in: UserUpdate) -> User:
+        if obj_in.password:
+            obj_in.password = get_password_hash(obj_in.password)  # type: ignore
+        set_attrs(db_obj, obj_in)
+        db.add(db_obj)
+        await db.commit()
+        return db_obj
 
 
 user = CRUDUser(User)

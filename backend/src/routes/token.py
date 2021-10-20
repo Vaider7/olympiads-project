@@ -1,15 +1,14 @@
 from typing import Any
 
-from fastapi import Depends, FastAPI, HTTPException
+from fastapi import APIRouter, Depends, FastAPI, HTTPException
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src.core.security import create_access_token
 from src import crud, schemas
+from src.core.security import create_access_token
 from src.deps import deps
-from fastapi import APIRouter
 
-router = APIRouter()
+router = APIRouter(tags=["Token"])
 
 
 @router.post("/api/token", response_model=schemas.Token)
@@ -22,7 +21,10 @@ async def access_token(
     if not user:
         raise HTTPException(status_code=400, detail="Неверный логин или пароль")
 
-    return {"access_token": create_access_token({"user_id": user.id}), "token_type": "bearer"}
+    return {
+        "access_token": create_access_token({"user_id": user.id}),
+        "token_type": "bearer",
+    }
 
 
 def add_route(app: FastAPI) -> None:

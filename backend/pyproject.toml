@@ -16,7 +16,7 @@ bcrypt = "^3.2.0"
 python-jose = {extras = ["cryptography"], version = "^3.3.0"}
 pydantic = {extras = ["email"], version = "^1.8.2"}
 python-multipart = "^0.0.5"
-psycopg = "^3.0"
+psycopg2-binary = "^2.9.1"
 
 
 
@@ -35,3 +35,4 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.black]
 line-length = 121
+extend-exclude = 'alembic'

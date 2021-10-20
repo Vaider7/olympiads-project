@@ -1,9 +1,9 @@
 from sqlalchemy import create_engine
 
 from alembic import context
+from loaders.load_models import load_models
 from src.core.config import settings
 from src.core.project_variables import init_project_variables
-from loaders.load_models import load_models
 from src.db.base_class import Base
 
 init_project_variables()
@@ -19,7 +19,7 @@ def run_migrations_online():
 
     """
     connectable = create_engine(
-        f"postgresql+psycopg://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
+        f"postgresql+psycopg2://{settings.POSTGRES_USER}:{settings.POSTGRES_PASSWORD}@{settings.POSTGRES_SERVER}:{settings.POSTGRES_PORT}/{settings.POSTGRES_DB}"
     )
 
     with connectable.connect() as connection:

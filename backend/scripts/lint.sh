@@ -2,7 +2,7 @@
 
 set -x
 
-mypy .
+mypy . --show-error-codes
 black . --check
 isort .
 flake8 .

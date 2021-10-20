@@ -1,8 +1,8 @@
 from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
 
-from src.core.project_variables import init_project_variables
 from loaders.load_routes import load_routes
+from src.core.project_variables import init_project_variables
 
 init_project_variables()
 

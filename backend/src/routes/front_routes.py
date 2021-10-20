@@ -1,12 +1,12 @@
 import os
+from typing import Any
 
+from fastapi import APIRouter, FastAPI
 from fastapi.responses import HTMLResponse
 
 from src.core.front_paths import front_paths
 
-from fastapi import APIRouter
-
-router = APIRouter()
+router = APIRouter(tags=["Front Pages"])
 
 front_app = open("../frontend/assets/html/app.html", "r").read()
 
@@ -20,10 +20,10 @@ def get_front() -> str:
 
 for path in front_paths:
 
-    @router.get(path, response_class=HTMLResponse, tags=["Front Pages"])
-    async def front_page():
+    @router.get(path, response_class=HTMLResponse)
+    async def front_page() -> Any:
         return get_front()
 
 
-def add_route(app):
+def add_route(app: FastAPI) -> None:
     app.include_router(router)
