@@ -1,10 +1,9 @@
 from typing import Any
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException
-from fastapi.encoders import jsonable_encoder
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import crud, models, schemas
+from src import crud, schemas
 from src.core.security import get_password_hash
 from src.deps import deps
 
@@ -24,7 +23,7 @@ async def signup(*, db: AsyncSession = Depends(deps.get_db), user_data: schemas.
     if check_user:
         raise HTTPException(
             status_code=400,
-            detail="Указанная почта уже занята",
+            detail="Аккаунт с данной почтой уже существует",
         )
     user_data.password = get_password_hash(user_data.password)  # type: ignore[assignment]
     await crud.user.create(
@@ -33,27 +32,6 @@ async def signup(*, db: AsyncSession = Depends(deps.get_db), user_data: schemas.
     )
 
     return
-
-
-@router.post("/api/users/shit")
-async def test(*, current_user: models.User = Depends(deps.get_current_user)) -> Any:
-    return current_user
-
-
-@router.post("/api/users/update")
-async def shit(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_user),
-    to_update: schemas.user.UserUpdate
-) -> Any:
-    current_user_data = jsonable_encoder(current_user)
-    user_in = schemas.user.UserUpdate(**current_user_data)
-
-    for field in to_update:
-        setattr(user_in, field[0], field[1])
-
-    return current_user.id
 
 
 def add_route(app: FastAPI) -> None:

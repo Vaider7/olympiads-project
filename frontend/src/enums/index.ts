@@ -6,5 +6,11 @@ enum Loading {
   ERROR
 }
 
+enum TaskType {
+  ONE = 'one',
+  MULTI = 'multi',
+  HANDWRITTEN = 'handwritten',
+  FREE = 'free'
+}
 
-export {Loading};
+export {Loading, TaskType};

@@ -1,18 +1,26 @@
 from typing import Any
 
-from fastapi import APIRouter, Body, Depends, FastAPI, HTTPException, Path
-from pydantic import PositiveInt
+from fastapi import APIRouter, Depends, FastAPI, HTTPException, Path, Security
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from src import crud, schemas
 from src.deps import deps
 
+from ..custom_types.postitve_int import positive_int
+from ..deps.deps import get_current_user
+from ..schemas.task import TaskCreate
+
 router = APIRouter(tags=["Olympiads"])
 
 
-@router.post("/api/olympiads/create")
+@router.post(
+    "/api/olympiads/create",
+    dependencies=[Security(get_current_user, scopes=["teacher"])],
+)
 async def create_olympiad(
-    *, db: AsyncSession = Depends(deps.get_db), olympiad_data: schemas.OlympiadCreate
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    olympiad_data: schemas.OlympiadCreate,
 ) -> Any:
     """
     Create new olympiad
@@ -22,34 +30,37 @@ async def create_olympiad(
     - **end**: time of end of olympiad
     - **duration**: duration for one attempt
     """
+
     if not olympiad_data.tasks:
         await crud.olympiad.create(db, obj_in=olympiad_data)
         return
 
     tasks = olympiad_data.tasks.copy()
     del olympiad_data.tasks
-    olympiad = await crud.olympiad.create(db, obj_in=olympiad_data)
+
+    max_points = sum([task.points for task in tasks])
+    olympiad = await crud.olympiad.create_olympiad(db, obj_in=olympiad_data, max_points=max_points)
 
     for task in tasks:
-        task.olympiad_id = olympiad.id
+        dict_task = task.dict()
+        dict_task.update({"olympiad_id": olympiad.id})
 
-        await crud.task.create(db, obj_in=task)
+        await crud.task.create(db, obj_in=TaskCreate(**dict_task))
 
     return
 
 
-@router.delete("/api/olympiads/delete")
-async def delete_olympiad(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    olympiad_id: PositiveInt = Body(..., example=1)
-) -> Any:
+@router.delete(
+    "/api/olympiads/delete",
+    dependencies=[Security(get_current_user, scopes=["teacher"])],
+)
+async def delete_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_id: positive_int) -> Any:
     """
     Remove olympiad
-    - **id**: id of olympiad
+    - **olympiad_id**: id of olympiad
     """
 
-    olympiad = await crud.olympiad.remove(db, id=olympiad_id)
+    olympiad = await crud.olympiad.delete(db, id=olympiad_id)
 
     if not olympiad:
         raise HTTPException(
@@ -60,10 +71,11 @@ async def delete_olympiad(
     return
 
 
-@router.put("/api/olympiads/update")
-async def update_olympiad(
-    *, db: AsyncSession = Depends(deps.get_db), olympiad_data: schemas.OlympiadUpdate
-) -> Any:
+@router.put(
+    "/api/olympiads/update",
+    dependencies=[Security(get_current_user, scopes=["teacher"])],
+)
+async def update_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_data: schemas.OlympiadUpdate) -> Any:
     """
     Create new olympiad
     - **id**: id of olympiad
@@ -91,11 +103,7 @@ async def get_olympiads(*, db: AsyncSession = Depends(deps.get_db)) -> Any:
 
 
 @router.get("/api/olympiads/{olympiad_id}", response_model=schemas.OlympiadWithTasks)
-async def get_olympiad(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    olympiad_id: PositiveInt = Path(..., example=1)
-) -> Any:
+async def get_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_id: positive_int = Path(...)) -> Any:
     olympiad = await crud.olympiad.get(db, id=olympiad_id)
     if not olympiad:
         raise HTTPException(

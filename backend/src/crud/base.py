@@ -1,7 +1,6 @@
 from datetime import datetime
 from typing import Generic, Optional, Type, TypeVar
 
-from fastapi.encoders import jsonable_encoder
 from pydantic import BaseModel
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
@@ -60,13 +59,12 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
             db_obj = await self.get(db, id=obj_in.id)  # type: ignore[attr-defined]
             if db_obj is None:
                 return None
-        obj_data = jsonable_encoder(obj_in)
-        set_attrs(db_obj, obj_data)
+        set_attrs(db_obj, obj_in)
         db.add(db_obj)
         await db.commit()
         return db_obj
 
-    async def remove(self, db: AsyncSession, *, id: int) -> Optional[ModelType]:
+    async def delete(self, db: AsyncSession, *, id: int) -> Optional[ModelType]:
         stmt = select(self.model).filter(self.model.id == id, self.model.deletedAt == None)
         result = await db.execute(stmt)
         db_obj = result.scalar()

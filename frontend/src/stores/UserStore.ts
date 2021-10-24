@@ -32,7 +32,7 @@ export default class UserStore {
   checkLogged = async (): Promise<void> => {
     try {
       const result = await axios.post(
-        '/api/user/get',
+        '/api/users/get',
         {},
         {
           headers: {

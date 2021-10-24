@@ -7,6 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src import crud, schemas
 from src.core.security import create_access_token
 from src.deps import deps
+from src.schemas import TokenPayload
 
 router = APIRouter(tags=["Token"])
 
@@ -21,8 +22,12 @@ async def access_token(
     if not user:
         raise HTTPException(status_code=400, detail="Неверный логин или пароль")
 
+    scopes: list[str] = ["student"]
+    if "@tyuiu.ru" in user.username:
+        scopes.append("teacher")
+
     return {
-        "access_token": create_access_token({"user_id": user.id}),
+        "access_token": create_access_token(TokenPayload(user_id=user.id, scopes=scopes)),
         "token_type": "bearer",
     }
 

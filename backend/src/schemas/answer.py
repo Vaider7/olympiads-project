@@ -1,10 +1,10 @@
-from typing import Optional
+from pydantic import BaseModel, Field
 
-from pydantic import BaseModel, Field, PositiveInt
+from src.custom_types.postitve_int import positive_int
 
 
 class AnswerBase(BaseModel):
-    no: PositiveInt = Field(..., example=1)
+    no: positive_int
     possible_answer: str = Field(..., example="Vanya have 5 apples")
 
 

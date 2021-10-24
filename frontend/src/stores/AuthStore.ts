@@ -215,7 +215,7 @@ export default class AuthStore implements IAuthStore {
 
     try {
       const result = await axios.post(
-        '/api/signup',
+        '/api/users/signup',
         this.signupData
       );
       this.changeLoadingStatus(Loading.DONE);

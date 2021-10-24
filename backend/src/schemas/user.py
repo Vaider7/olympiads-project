@@ -1,6 +1,8 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr, Field, PositiveInt
+from pydantic import BaseModel, EmailStr, Field
+
+from src.custom_types.postitve_int import positive_int
 
 
 class UserBase(BaseModel):
@@ -14,11 +16,11 @@ class UserCreate(UserBase):
 
 
 class UserUpdate(UserBase):
-    password: Optional[str] = Field(None)
+    password: Optional[str] = None
 
 
 class UserInDBBase(UserBase):
-    id: Optional[PositiveInt] = None
+    id: Optional[positive_int] = None
 
     class Config:
         orm_mode = True
