@@ -1,10 +1,10 @@
 import loadable from '@loadable/component';
 import React from 'react';
-import PageLoader from '../components/shared/Loaders/PageLoader';
+import Loader from '../components/shared/Loaders/Loader';
 
 // eslint-disable-next-line @typescript-eslint/promise-function-async
 const AsyncLoader = loadable((props: {pathToPage: string}) => import(`../views/${props.pathToPage}`), {
-  fallback: <PageLoader />
+  fallback: <Loader />
 });
 
 export default React.memo(AsyncLoader);

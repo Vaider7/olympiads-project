@@ -4,12 +4,10 @@ from sqlalchemy import Column, Integer
 from sqlalchemy.ext.declarative import as_declarative
 from sqlalchemy.orm import Mapped, declared_attr
 
-from src.custom_types.postitve_int import positive_int
-
 
 @as_declarative()
 class Base(object):
-    id: positive_int = Column(Integer, primary_key=True)
+    id: int = Column(Integer, primary_key=True)
     __name__: str
     deletedAt: datetime
 

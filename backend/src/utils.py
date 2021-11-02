@@ -25,14 +25,14 @@ def get_utctime() -> datetime:
 def check_olympiad_availability(olympiad: Olympiad) -> None:
     time_now = get_utctime()
 
-    if not (time_now > olympiad.end):
+    if time_now > olympiad.end:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Данная олимпиада завершилась",
         )
 
-    if not (time_now < olympiad.end):
+    if time_now < olympiad.start:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Данная ещё не началась",
+            detail="Данная олимпиада ещё не началась",
         )

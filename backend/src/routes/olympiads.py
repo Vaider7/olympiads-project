@@ -2,13 +2,16 @@ from typing import Any
 
 from fastapi import APIRouter, Depends, FastAPI, HTTPException, Path, Security
 from sqlalchemy.ext.asyncio import AsyncSession
+from starlette import status
 
 from src import crud, schemas
 from src.deps import deps
 
 from ..custom_types.postitve_int import positive_int
 from ..deps.deps import get_current_user
+from ..models import User
 from ..schemas.task import TaskCreate
+from ..utils import check_olympiad_availability
 
 router = APIRouter(tags=["Olympiads"])
 
@@ -103,13 +106,39 @@ async def get_olympiads(*, db: AsyncSession = Depends(deps.get_db)) -> Any:
 
 
 @router.get("/api/olympiads/{olympiad_id}", response_model=schemas.OlympiadWithTasks)
-async def get_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_id: positive_int = Path(...)) -> Any:
-    olympiad = await crud.olympiad.get(db, id=olympiad_id)
+async def get_olympiad(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(get_current_user, scopes=["student"]),
+    olympiad_id: positive_int = Path(...),
+) -> Any:
+    olympiad = await crud.olympiad.get_olympiad(db, id=olympiad_id, user_id=current_user.id)
+
     if not olympiad:
         raise HTTPException(
             status_code=404,
             detail="Олимпиада не найдена",
         )
+
+    check_olympiad_availability(olympiad)
+
+    registered_user = await crud.registered_user.get_already_registered(
+        db, olympiad_id=olympiad_id, user_id=current_user.id
+    )
+
+    if not registered_user:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Сначала пройдите регистрацию",
+        )
+
+    if not registered_user.start_time:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Сначала начните олимпиаду",
+        )
+
+    olympiad.registered_user_id = registered_user.id
 
     return olympiad
 

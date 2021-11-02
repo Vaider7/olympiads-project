@@ -14,6 +14,7 @@ if TYPE_CHECKING:
 
 class Olympiad(Base):
     name: str = Column(String, nullable=False)
+    description: str = Column(String, nullable=False)
     discipline: str = Column(String, nullable=False)
     start: datetime = Column(DateTime(timezone=True), nullable=False)
     end: datetime = Column(DateTime(timezone=True), nullable=True)
@@ -22,3 +23,5 @@ class Olympiad(Base):
     tasks: list["Task"] = relationship("Task", backref="olympiad", lazy="noload")
     max_points: non_negative_int = Column(Integer, nullable=False)
     registered_users: list["RegisteredUser"] = relationship("RegisteredUser", backref="olympiad", lazy="noload")
+
+    registered_user_id: int

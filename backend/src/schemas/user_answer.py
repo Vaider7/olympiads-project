@@ -1,12 +1,13 @@
 from pydantic import BaseModel
 
 from ..custom_types.postitve_int import positive_int
+from ..schemas import Task
 
 
 class UserAnswerBase(BaseModel):
-    registered_user_id: positive_int
+    olympiad_id: positive_int
     task_id: positive_int
-    answer_no: positive_int
+    answer: list[str]
 
 
 class UserAnswerCreate(UserAnswerBase):
@@ -17,7 +18,7 @@ class UserAnswerUpdate(UserAnswerBase):
     pass
 
 
-class UserAnswerInDB(BaseModel):
+class UserAnswerInDB(UserAnswerBase):
     id: positive_int
 
     class Config:
@@ -25,4 +26,4 @@ class UserAnswerInDB(BaseModel):
 
 
 class UserAnswer(UserAnswerInDB):
-    pass
+    task: Task

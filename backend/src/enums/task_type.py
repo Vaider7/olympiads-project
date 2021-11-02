@@ -1,8 +1,8 @@
 from enum import Enum
 
 
-class TaskType(str, Enum):
+class task_type(str, Enum):
     ONE = "one"
     MULTI = "multi"
-    HANDWRITTEN = "handwritten"
+    TYPED = "typed"
     FREE = "free"

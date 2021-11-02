@@ -43,7 +43,6 @@
     "no-shadow": "warn",
     "array-bracket-spacing": "warn",
     "brace-style": "off",
-    "camelcase": "warn",
     "comma-dangle": "off",
     "comma-spacing": "off",
     "comma-style": "warn",
@@ -64,7 +63,7 @@
     "no-whitespace-before-property": "warn",
     "object-curly-newline": "warn",
     "object-curly-spacing": "warn",
-    "object-property-newline": ["warn", {"allowAllPropertiesOnSameLine": false}],
+    "object-property-newline": ["warn", {"allowAllPropertiesOnSameLine": true}],
     "operator-assignment": "warn",
     "operator-linebreak": ["warn", "after"],
     "padding-line-between-statements": ["warn", {"blankLine": "always", "prev": "*", "next": [
@@ -114,7 +113,6 @@
       "unnamedComponents": "arrow-function"
     }],
     "react/no-adjacent-inline-elements": "warn",
-    "react/no-array-index-key": "warn",
     "react/no-redundant-should-component-update": "warn",
     "react/no-this-in-sfc": "warn",
     "react/no-typos": "warn",
@@ -147,7 +145,7 @@
     "react/jsx-no-literals": ["warn", {"noStrings": false, "allowedStrings": ["allowed"], "ignoreProps": false, "noAttributeStrings": true }],
     "react/jsx-no-script-url": "warn",
     "react/jsx-no-useless-fragment": "warn",
-    "react/jsx-one-expression-per-line": ["warn", {"allow": "literal"}],
+    "react/jsx-one-expression-per-line": ["warn", {"allow": "single-child"}],
     "react/jsx-pascal-case": "warn",
     "react/jsx-props-no-multi-spaces": "warn",
     "react/jsx-tag-spacing": "warn",
@@ -186,6 +184,10 @@
       {
         "selector": "enumMember",
         "format": ["UPPER_CASE"]
+      },
+      {
+        "selector": ["objectLiteralProperty"],
+        "format": ["camelCase", "snake_case"]
       }
     ],
     "@typescript-eslint/no-confusing-void-expression": "warn",

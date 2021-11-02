@@ -1,5 +1,6 @@
 import {RouteComponentProps} from 'react-router';
 import {ChangeEvent} from 'react';
+import {Loading} from '../enums';
 
 interface IRouterStore {
   setRoute: <T extends RouteComponentProps>(location: T['location'], match: T['match'], history: T['history']) => void,
@@ -26,5 +27,27 @@ interface IAuthStore {
   errorText: string
 }
 
+interface IUserStore {
+  loadingStatus: Loading,
+  isLogged: boolean,
+  user: Record<string, unknown>,
+  changeIsLogged: (value: boolean) => void,
+  setUser: (user: Record<string, unknown>) => void,
+  changeLoadingStatus: (status: Loading) => void
+}
 
-export {IRouterStore, IStoreWrapperProps, IAuthStore};
+interface Olympiad {
+  id: number,
+  discipline: string,
+  description: string,
+  duration: number,
+  name: string,
+  start: Date,
+  end: Date,
+  formattedStart?: string,
+  formattedEnd?: string,
+  formattedDuration: string
+}
+
+
+export {IRouterStore, IStoreWrapperProps, IAuthStore, IUserStore, Olympiad};

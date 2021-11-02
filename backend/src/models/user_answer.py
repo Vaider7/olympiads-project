@@ -1,10 +1,17 @@
-from sqlalchemy import Column, ForeignKey, Integer
+from typing import TYPE_CHECKING
 
-from src.db.base_class import Base
+from sqlalchemy import ARRAY, Column, ForeignKey, Integer, String
+
+from ..db.base_class import Base
+
+if TYPE_CHECKING:
+    from .task import Task
 
 
 class UserAnswer(Base):
-    registered_user_id = Column(Integer, ForeignKey("registered_users.id"))
-    task_id = Column(Integer, ForeignKey("tasks.id"))
-    answer_no = Column(Integer, nullable=False)
-    #  answer = [""]
+    user_id: int = Column(Integer, ForeignKey("users.id"))
+    olympiad_id: int = Column(Integer, ForeignKey("olympiads.id"))
+    task_id: int = Column(Integer, ForeignKey("tasks.id"))
+    answer: list[str] = Column(ARRAY(String), nullable=False)  # type: ignore
+
+    task: "Task"

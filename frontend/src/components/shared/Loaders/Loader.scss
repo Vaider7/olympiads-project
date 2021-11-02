@@ -1,5 +1,14 @@
 @import '../variables/variables';
 
+.loader {
+  color: $main-100 !important;
+}
+
+.pageLoader {
+  color: $main-100 !important;
+  z-index: 20;
+}
+
 .wrapper {
   position: absolute;
   top: 0;
@@ -11,9 +20,4 @@
   justify-content: center;
   align-items: center;
   z-index: 10;
-
-  .loader {
-    color: $main-100;
-    z-index: 20;
-  }
 }

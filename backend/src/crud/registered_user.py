@@ -2,20 +2,17 @@ from typing import Optional
 
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.orm import joinedload, load_only, lazyload
+from sqlalchemy.orm import joinedload
 
-from ..custom_types.postitve_int import positive_int
-from ..models import Olympiad
 from ..models.registered_user import RegisteredUser
-from ..schemas.registered_user import RegisteredUserCreate, RegisteredUserUpdate
+from ..schemas.registered_user import (RegisteredUserCreate,
+                                       RegisteredUserUpdate)
 from .base import CRUDBase
 
 
-class CRUDRegisteredUser(
-    CRUDBase[RegisteredUser, RegisteredUserCreate, RegisteredUserUpdate]
-):
+class CRUDRegisteredUser(CRUDBase[RegisteredUser, RegisteredUserCreate, RegisteredUserUpdate]):
     async def get_already_registered(
-        self, db: AsyncSession, *, olympiad_id: positive_int, user_id: positive_int
+        self, db: AsyncSession, *, olympiad_id: int, user_id: int
     ) -> Optional[RegisteredUser]:
         result = await db.execute(
             select(self.model)
@@ -28,6 +25,14 @@ class CRUDRegisteredUser(
 
         olympiad = result.scalars().first()
         return olympiad
+
+    async def get_registered_user(self, db: AsyncSession, *, user_id: int, olympiad_id: int) -> Optional[RegisteredUser]:
+        result = await db.execute(
+            select(self.model).where(self.model.user_id == user_id, self.model.olympiad_id == olympiad_id)
+        )
+
+        registered_user = result.scalars().first()
+        return registered_user
 
 
 registered_user = CRUDRegisteredUser(RegisteredUser)

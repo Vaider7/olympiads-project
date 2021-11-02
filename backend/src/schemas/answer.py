@@ -14,3 +14,10 @@ class AnswerCreate(AnswerBase):
 
 class AnswerUpdate(AnswerBase):
     verity: bool
+
+
+class Answer(AnswerBase):
+    verity: bool
+
+    class Config:
+        orm_mode = True

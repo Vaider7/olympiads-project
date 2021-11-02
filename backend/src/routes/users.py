@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from src import crud, schemas
 from src.core.security import get_password_hash
 from src.deps import deps
+from src.models import User
 
 router = APIRouter(tags=["Users"])
 
@@ -32,6 +33,12 @@ async def signup(*, db: AsyncSession = Depends(deps.get_db), user_data: schemas.
     )
 
     return
+
+
+@router.post("/api/users/get", response_model=schemas.User)
+async def get_user(*, db: AsyncSession = Depends(deps.get_db), current_user: User = Depends(deps.get_current_user)):
+    user = await crud.user.get(db, id=current_user.id)
+    return user
 
 
 def add_route(app: FastAPI) -> None:

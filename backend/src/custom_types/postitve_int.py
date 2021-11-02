@@ -2,6 +2,8 @@ from typing import Any
 
 
 class positive_int(int):
+    gt = 0
+
     @classmethod
     def __get_validators__(cls) -> Any:
         yield cls.validate

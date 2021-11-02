@@ -12,7 +12,9 @@ export default class Body extends React.Component<{children: ReactNode, excludeH
       return (
         <div className={s.page}>
           <Header />
-          {children}
+          <div className={s.pageWrapper}>
+            {children}
+          </div>
         </div>
       );
     }

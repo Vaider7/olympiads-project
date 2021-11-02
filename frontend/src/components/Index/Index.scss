@@ -1,6 +1,105 @@
-.some {
-  width: calc(100% / 3);
-  color: orange;
-  display: block;
-  flex: 100px;
+@import "../shared/variables/variables";
+
+.loaderWrapper {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: -1;
+  .loader {
+    width: 50px !important;
+    height: 50px !important;
+}
+}
+
+
+
+.indexPage {
+  width: 1140px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+
+  .header {
+    margin-top: 30px;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .table {
+    border-radius: 2px;
+    margin-top: 10px;
+    min-width: 100%;
+    border-collapse: collapse;
+    border: 1px solid $gray-400;
+
+    .tr {
+      border: 1px solid $gray-400;
+      .td, .th {
+        text-align: center;
+        border: 1px solid $gray-400;
+        padding: 12px;
+      }
+
+      .takePart {
+        transition: $hover-transition;
+        color: $main-100;
+        cursor: pointer;
+
+        &:hover {
+          color: $main-200;
+        }
+      }
+    }
+
+    .colored {
+      background-color: rgba($main-100, 0.04);
+    }
+  }
+}
+
+.selectedOlympiad {
+  margin-top: 30px;
+
+  .header {
+    margin-top: 30px;
+    font-size: 30px;
+    font-weight: 600;
+  }
+
+  .discipline {
+    margin-top: 10px;
+    font-size: 18px;
+    color: $gray-500;
+  }
+
+  .description {
+    margin-top: 20px;
+    font-size: 16px;
+  }
+
+  .buttons {
+    margin-top: 20px;
+
+    .accept {
+      background-color: $gray-50;
+      width: 200px;
+      transition: $hover-transition;
+
+      &:hover {
+        color: $white;
+        background-color: $main-100;
+      }
+    }
+
+    .decline {
+      width: 120px;
+      margin-left: 20px;
+    }
+  }
 }

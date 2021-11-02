@@ -3,7 +3,7 @@ import {MobXProviderContext, observer} from 'mobx-react';
 import {default as s} from './Header.scss';
 import {Link} from 'react-router-dom';
 import {Loading} from '../../../enums';
-import PageLoader from '../Loaders/PageLoader';
+import Loader from '../Loaders/Loader';
 
 @observer
 export default class Header extends React.Component {
@@ -14,7 +14,7 @@ export default class Header extends React.Component {
     const {loadingStatus} = this.UserStore;
 
     if (loadingStatus === Loading.PENDING) {
-      return <PageLoader />;
+      return <Loader type={'page'} />;
     }
 
     return (

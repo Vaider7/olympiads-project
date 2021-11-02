@@ -94,7 +94,7 @@ export default class Login extends React.Component {
             </Link>
             <Button onClick={togglePage} variant={'text'}>Вход</Button>
           </div>
-          <p className={s.errorTextSingup}>
+          <p className={s.errorTextSignup}>
             {errorText}
           </p>
         </div>
