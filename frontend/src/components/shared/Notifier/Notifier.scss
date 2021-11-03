@@ -1,0 +1,60 @@
+@import "../variables/variables";
+
+.successWrapper {
+  border-color: $success-100 !important;
+
+}
+
+.errWrapper {
+  border-color: $danger-100 !important;
+}
+
+.warnWrapper {
+  border-color: $warning-100 !important;
+}
+
+.wrapper {
+  width: fit-content;
+  height: 45px;
+  border-radius: 5px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  border: 1px solid;
+
+  .text {
+    font-size: 16px;
+    margin-right: 20px;
+  }
+
+  .successText {
+    color: $success-100;
+  }
+
+  .errText {
+    color: $danger-100;
+  }
+
+  .warnText {
+    color: $warning-100;
+  }
+
+  .iconWrapper {
+    width: 30px;
+    height: 30px;
+    margin-left: 12px;
+    margin-right: 12px;
+  }
+
+  .successIcon {
+    color: $success-100;
+  }
+
+  .errIcon {
+    color: $danger-100;
+  }
+
+  .warnIcon {
+    color: $warning-100;
+  }
+}

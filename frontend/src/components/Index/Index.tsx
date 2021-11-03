@@ -7,6 +7,7 @@ import Loader from '../shared/Loaders/Loader';
 import {Loading} from '../../enums';
 import Button from '../shared/Button/Button';
 
+import Notifier from '../shared/Notifier/Notifier';
 
 @observer
 export default class Index extends React.Component {
