@@ -86,7 +86,14 @@
   .buttons {
     margin-top: 20px;
 
-    .accept {
+    .loader {
+      color: $white !important;
+      width: 25px !important;
+      height: 25px !important;
+    }
+
+    .accept, .inProgress {
+      height: 30px;
       background-color: $gray-50;
       width: 200px;
       transition: $hover-transition;
@@ -97,8 +104,13 @@
       }
     }
 
+    .inProgress {
+      background-color: $main-100;
+    }
+
     .decline {
-      width: 120px;
+      height: 30px;
+      width: 145px;
       margin-left: 20px;
     }
   }

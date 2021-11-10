@@ -11,14 +11,10 @@ export default class IndexStore {
     this.loadOlympiads();
   }
 
-  olympiads: Olympiad[] = [];
   @observable loadingStatus = Loading.PENDING;
   @observable selectedOlympiad: Olympiad | undefined;
 
-
-  setOlympiads = (olympiads: Olympiad[]): void => {
-    this.olympiads = olympiads;
-  }
+  olympiads: Olympiad[] = [];
 
   @action changeLoadingStatus = (status: Loading): void => {
     this.loadingStatus = status;
@@ -29,6 +25,16 @@ export default class IndexStore {
       this.selectedOlympiad = undefined;
     }
     this.selectedOlympiad = this.olympiads.find((olympiad) => olympiad.id === id);
+  }
+
+  // @action takePart = (): void => {
+  //   window.notify('success', 'Вы успешно зарегестрировались на олимпиаду');
+  //
+  //   this.setOlympiadDetails(undefined);
+  // }
+
+  setOlympiads = (olympiads: Olympiad[]): void => {
+    this.olympiads = olympiads;
   }
 
   loadOlympiads = async (): Promise<void> => {
@@ -55,7 +61,9 @@ export default class IndexStore {
   }
 
   takePart = async (): Promise<void> => {
-    await request('post', '/api/olympiads/get', {olympiad_id: this.selectedOlympiad?.id});
+    this.changeLoadingStatus(Loading.PENDING);
+
+    await request('post', '/api/users-olympiads/register', {olympiad_id: this.selectedOlympiad?.id});
 
 
   }

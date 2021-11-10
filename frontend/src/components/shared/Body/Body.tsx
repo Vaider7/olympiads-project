@@ -5,24 +5,31 @@ import {default as s} from './Body.scss';
 
 @observer
 export default class Body extends React.Component<{children: ReactNode, excludeHeader?: boolean}> {
+
   render (): ReactNode {
     const {children, excludeHeader} = this.props;
 
     if (!excludeHeader) {
       return (
-        <div className={s.page}>
-          <Header />
-          <div className={s.pageWrapper}>
-            {children}
+        <React.Fragment>
+          <div id={'notify-block'} />
+          <div className={s.page}>
+            <Header />
+            <div className={s.pageWrapper}>
+              {children}
+            </div>
           </div>
-        </div>
+        </React.Fragment>
       );
     }
 
     return (
-      <div className={s.page}>
-        {children}
-      </div>
+      <React.Fragment>
+        <div id={'notify-block'} />
+        <div className={s.page}>
+          {children}
+        </div>
+      </React.Fragment>
     );
   }
 }

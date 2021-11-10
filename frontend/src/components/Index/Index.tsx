@@ -7,8 +7,6 @@ import Loader from '../shared/Loaders/Loader';
 import {Loading} from '../../enums';
 import Button from '../shared/Button/Button';
 
-import Notifier from '../shared/Notifier/Notifier';
-
 @observer
 export default class Index extends React.Component {
   static contextType = MobXProviderContext;
@@ -16,8 +14,8 @@ export default class Index extends React.Component {
 
 
   render (): ReactNode {
-    const {loadingStatus, olympiads, selectedOlympiad, setOlympiadDetails} = this.IndexStore;
-    if (loadingStatus === Loading.PENDING) {
+    const {loadingStatus, olympiads, selectedOlympiad, setOlympiadDetails, takePart} = this.IndexStore;
+    if (loadingStatus === Loading.PENDING && olympiads.length === 0) {
       return (
         <div className={s.loaderWrapper}>
           <Loader type={'element'} className={s.loader} />
@@ -44,7 +42,14 @@ export default class Index extends React.Component {
             {selectedOlympiad.description}
           </div>
           <div className={s.buttons}>
-            <Button className={s.accept}>Принять участие</Button>
+            <Button
+              className={loadingStatus === Loading.PENDING ? s.inProgress : s.accept}
+              onClick={takePart}
+            >
+              {loadingStatus === Loading.PENDING ?
+                <Loader type={'element'} className={s.loader} thickness={3} /> :
+                'Принять участие'}
+            </Button>
             <Button
               className={s.decline}
               onClick={() => {
