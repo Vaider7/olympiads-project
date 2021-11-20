@@ -10,6 +10,7 @@ from src.db.base_class import Base
 from ..schemas.answer import Answer
 
 if TYPE_CHECKING:
+    from .olympiad import Olympiad
     from .user_answer import UserAnswer
 
 
@@ -25,3 +26,4 @@ class Task(Base):
     points: int = Column(Integer, nullable=False, default=0)
 
     user_answer: "UserAnswer" = relationship("UserAnswer", backref="task")
+    olympiad: "Olympiad"

@@ -1,16 +1,20 @@
 /* eslint no-shadow: "off" */
 
-enum Loading {
+export enum Loading {
   PENDING,
   DONE,
   ERROR
 }
 
-enum TaskType {
+export enum TaskType {
   ONE = 'one',
   MULTI = 'multi',
   HANDWRITTEN = 'handwritten',
   FREE = 'free'
 }
 
-export {Loading, TaskType};
+export enum OlympiadStatus {
+  WAITING_START,
+  IN_PROGRESS,
+  FINISHED
+}

@@ -1,19 +1,18 @@
 import {action, makeObservable, observable} from 'mobx';
 import axios from 'axios';
 import {Loading} from '../enums';
-import {IUserStore} from '../types';
 
-export default class UserStore implements IUserStore{
+export default class UserStore {
   @observable loadingStatus = Loading.PENDING;
   @observable isLogged = false;
-  @observable user: Record<string, unknown> = {}
+  user: Record<string, unknown> = {}
 
 
   constructor () {
     makeObservable(this);
 
     if (localStorage.getItem('access_token')) {
-      setTimeout(this.checkLogged, 200);
+      setTimeout(this.checkLogged, 700);
     } else {
       this.changeIsLogged(false);
       this.changeLoadingStatus(Loading.DONE);
@@ -33,13 +32,15 @@ export default class UserStore implements IUserStore{
   }
 
   private checkLogged = async (): Promise<void> => {
+    const token = localStorage.getItem('access_token');
+    const headerValue = `Bearer ${token}`;
     try {
-      const result = await axios.post(
+      const result = await axios.get(
         '/api/users/get',
-        {},
         {
           headers: {
-            Authorization: `Bearer ${localStorage.getItem('access_token')}`
+            // eslint-disable-next-line @typescript-eslint/naming-convention
+            Authorization: headerValue
           }
         }
       );

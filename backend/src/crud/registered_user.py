@@ -10,7 +10,9 @@ from ..schemas.registered_user import (RegisteredUserCreate,
 from .base import CRUDBase
 
 
-class CRUDRegisteredUser(CRUDBase[RegisteredUser, RegisteredUserCreate, RegisteredUserUpdate]):
+class CRUDRegisteredUser(
+    CRUDBase[RegisteredUser, RegisteredUserCreate, RegisteredUserUpdate]
+):
     async def get_already_registered(
         self, db: AsyncSession, *, olympiad_id: int, user_id: int
     ) -> Optional[RegisteredUser]:
@@ -26,13 +28,27 @@ class CRUDRegisteredUser(CRUDBase[RegisteredUser, RegisteredUserCreate, Register
         olympiad = result.scalars().first()
         return olympiad
 
-    async def get_registered_user(self, db: AsyncSession, *, user_id: int, olympiad_id: int) -> Optional[RegisteredUser]:
+    async def get_registered_user(
+        self, db: AsyncSession, *, user_id: int, olympiad_id: int
+    ) -> Optional[RegisteredUser]:
         result = await db.execute(
-            select(self.model).where(self.model.user_id == user_id, self.model.olympiad_id == olympiad_id)
+            select(self.model).where(
+                self.model.user_id == user_id, self.model.olympiad_id == olympiad_id
+            )
         )
 
         registered_user = result.scalars().first()
         return registered_user
+
+    async def get_olympiads(
+        self, db: AsyncSession, *, user_id: int
+    ) -> Optional[list[RegisteredUser]]:
+        result = await db.execute(
+            select(self.model).where(self.model.user_id == user_id)
+        )
+
+        registered_olympiad = result.scalars().all()
+        return registered_olympiad
 
 
 registered_user = CRUDRegisteredUser(RegisteredUser)

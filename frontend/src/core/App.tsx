@@ -1,6 +1,6 @@
 import * as React from 'react';
 import {render} from 'react-dom';
-import Routes from './Routes';
+import Router from './Router';
 import 'core-js';
 import 'regenerator-runtime';
 import Notifier from '../components/shared/Notifier/Notifier';
@@ -48,4 +48,4 @@ window.notify = (variant: 'err' | 'success' | 'warn', text: string) => {
 };
 
 
-render(<Routes />, document.getElementById('app'));
+render(<Router />, document.getElementById('app'));

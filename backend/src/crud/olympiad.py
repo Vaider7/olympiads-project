@@ -15,27 +15,26 @@ Null = null()
 
 class CRUDOlympiad(CRUDBase[Olympiad, OlympiadCreate, OlympiadUpdate]):
     async def get_olympiad(
-        self, db: AsyncSession, *, id: int, user_id: int, with_deleted: bool = False
+        self, db: AsyncSession, *, id: int, with_deleted: bool = False
     ) -> Optional[Olympiad]:
         if not with_deleted:
             stmt = (
                 select(self.model)
                 .where(
                     self.model.id == id,
-                    self.model.deletedAt == None,
-                    User.id == user_id,
+                    self.model.deletedAt == Null,
                 )
-                .options(joinedload(self.model.tasks))
+                .options(joinedload("tasks"))
             )
         else:
             stmt = (
                 select(self.model)
                 .where(self.model.id == id)
-                .options(joinedload(Olympiad.tasks))
+                .options(joinedload("tasks"))
             )
         result = await db.execute(stmt)
 
-        return result.scalar()
+        return result.scalars().first()
 
     async def create_olympiad(
         self, db: AsyncSession, *, obj_in: OlympiadCreate, max_points: int = 0

@@ -1,38 +1,25 @@
-import React from 'react';
-import {MobXProviderContext} from 'mobx-react';
-import {IRouterStore, IStoreWrapperProps} from '../types';
-import {RouteComponentProps} from 'react-router';
+import React, {useContext} from 'react';
 import AsyncLoader from './LoadableComponents';
 import ErrorBoundary from './ErrorBoundary';
+import {useLocation, useNavigate, useParams, useSearchParams} from 'react-router-dom';
+import {MobXProviderContext} from 'mobx-react';
+import RouterStore from '../stores/RouterStore';
 
 
-interface IStoreWrapper extends RouteComponentProps, IStoreWrapperProps {}
+// eslint-disable-next-line react/display-name
+export default (props: { pathToFile: string }): JSX.Element => {
+  const navigator = useNavigate();
+  const location = useLocation();
+  const params = useParams();
+  const [, setSearchParams] = useSearchParams();
+  const stores = useContext(MobXProviderContext);
+  const RouterStore: RouterStore = stores.RouterStore; // eslint-disable-line no-shadow, prefer-destructuring
 
-export default class StoreWrapper extends React.Component<IStoreWrapper> {
-  static contextType = MobXProviderContext;
-  RouterStore: IRouterStore = this.context.RouterStore;
+  RouterStore.setRouterStore(navigator, location, params, setSearchParams);
 
-  componentDidMount (): void {
-    this.updateStore();
-  }
-
-  componentDidUpdate (): void {
-    this.updateStore();
-  }
-
-  updateStore (): void {
-    this.RouterStore.setRoute(
-      this.props.location,
-      this.props.match,
-      this.props.history
-    );
-  }
-
-  render (): React.ReactNode {
-    return (
-      <ErrorBoundary>
-        <AsyncLoader pathToPage={this.props.pathToFile} />
-      </ErrorBoundary>
-    );
-  }
-}
+  return (
+    <ErrorBoundary>
+      <AsyncLoader pathToPage={props.pathToFile} />
+    </ErrorBoundary>
+  );
+};

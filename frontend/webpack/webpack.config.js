@@ -49,7 +49,7 @@ module.exports = {
       template: './src/html/app.html',
       inject: 'head',
       filename: 'html/app.html',
-      publicPath: './assets'
+      publicPath: '/assets'
     }),
 
     new CleanWebpackPlugin({

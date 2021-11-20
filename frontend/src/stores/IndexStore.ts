@@ -1,20 +1,32 @@
-import {action, makeObservable, observable} from 'mobx';
-import {Loading} from '../enums';
+import {action, makeObservable, observable, when} from 'mobx';
+import {Loading, OlympiadStatus} from '../enums';
 import request from './utils';
 import {Olympiad} from '../types';
+import UserStore from './UserStore';
+import RouterStore from './RouterStore';
 
 
 export default class IndexStore {
-  constructor () {
+  UserStore!: UserStore;
+  RouterStore!: RouterStore;
+
+  constructor (store: UserStore, store2: RouterStore) {
     makeObservable(this);
 
+    this.UserStore = store;
+    this.RouterStore = store2;
+
     this.loadOlympiads();
+
+    when(() => this.UserStore.isLogged, this.loadRegistered);
   }
 
   @observable loadingStatus = Loading.PENDING;
+  @observable loadingRegistered = Loading.PENDING;
   @observable selectedOlympiad: Olympiad | undefined;
 
   olympiads: Olympiad[] = [];
+  registeredOlympiads: number[] = [];
 
   @action changeLoadingStatus = (status: Loading): void => {
     this.loadingStatus = status;
@@ -27,11 +39,9 @@ export default class IndexStore {
     this.selectedOlympiad = this.olympiads.find((olympiad) => olympiad.id === id);
   }
 
-  // @action takePart = (): void => {
-  //   window.notify('success', 'Вы успешно зарегестрировались на олимпиаду');
-  //
-  //   this.setOlympiadDetails(undefined);
-  // }
+  @action changeLoadingRegistered = (val: Loading): void => {
+    this.loadingRegistered = val;
+  }
 
   setOlympiads = (olympiads: Olympiad[]): void => {
     this.olympiads = olympiads;
@@ -47,6 +57,8 @@ export default class IndexStore {
       const end = new Date(olympiad.end);
       const {duration} = olympiad;
 
+      const time = new Date();
+
       olympiad.formattedStart =
         `${start.getDate()}.${String(start.getMonth()).length === 1 ? String(`0${start.getMonth()}`) :
           start.getMonth()} в ${start.getHours()}:${start.getMinutes()}`;
@@ -54,17 +66,71 @@ export default class IndexStore {
         `${end.getDate()}.${String(end.getMonth()).length === 1 ? String(`0${end.getMonth()}`) :
           end.getMonth()} в ${end.getHours()}:${end.getMinutes()}`;
       olympiad.formattedDuration = `${Math.floor(duration / 60)} ч ${duration % 60 === 0 ? '' : `${duration % 60} мин`}`;
+
+      if (time < start) {
+        olympiad.status = OlympiadStatus.WAITING_START;
+      } else if (time > start && time < end) {
+        olympiad.status = OlympiadStatus.IN_PROGRESS;
+      } else if (time > end) {
+        olympiad.status = OlympiadStatus.FINISHED;
+      }
     }
 
-    this.olympiads = result.res?.data as Olympiad[];
+    this.setOlympiads(olympiads);
+
     this.changeLoadingStatus(Loading.DONE);
   }
 
-  takePart = async (): Promise<void> => {
+  loadRegistered = async (): Promise<void> => {
+    const result = await request('get', '/api/users/get-registered');
+    this.registeredOlympiads = result.res?.data;
+
+    setTimeout(() => {
+      this.changeLoadingRegistered(Loading.DONE);
+    }, 700);
+  }
+
+  @action takePart = async (): Promise<void> => {
     this.changeLoadingStatus(Loading.PENDING);
 
-    await request('post', '/api/users-olympiads/register', {olympiad_id: this.selectedOlympiad?.id});
+    const result = await request('post', '/api/users-olympiads/register',
+      {olympiad_id: this.selectedOlympiad?.id});
 
+    if (result.err) {
+      window.notify('err', result.err);
+      this.setOlympiadDetails(undefined);
+      this.changeLoadingStatus(Loading.DONE);
 
+      return;
+    }
+
+    this.registeredOlympiads.push(this.selectedOlympiad?.id as number);
+    this.setOlympiadDetails(undefined);
+    this.changeLoadingStatus(Loading.DONE);
+  }
+
+  @action displayShit = (olympiad: Olympiad): string | undefined => {
+    if ((olympiad.status === OlympiadStatus.WAITING_START || olympiad.status === OlympiadStatus.IN_PROGRESS) &&
+      !this.registeredOlympiads.includes(olympiad.id)) {
+
+      return 'Участвовать';
+    }
+
+    if (olympiad.status === OlympiadStatus.FINISHED) {
+      return 'Завершена';
+    }
+
+    if (olympiad.status === OlympiadStatus.IN_PROGRESS) {
+      return 'Начать';
+    }
+
+    if (olympiad.status === OlympiadStatus.WAITING_START) {
+      return 'Ожидание старта';
+    }
+  }
+
+  startOlympiad = async (id: number): Promise<void> => {
+    await request('patch', `/api/users-olympiads/start?olympiad_id=${id}`);
+    this.RouterStore.navigate(`/olympiads/${id}`);
   }
 }

@@ -3,10 +3,14 @@ import {IAuthStore} from '../types';
 import {ChangeEvent} from 'react';
 import {Loading} from '../enums';
 import request from './utils';
+import RouterStore from './RouterStore';
 
 export default class AuthStore implements IAuthStore {
-  constructor () {
+  readonly RouterStore!: RouterStore
+  constructor (store: RouterStore) {
     makeObservable(this);
+
+    this.RouterStore = store;
   }
 
   @observable pageState = 'login';
@@ -102,6 +106,7 @@ export default class AuthStore implements IAuthStore {
     formData.append('password', this.loginData.password);
 
     const result = await request('post', '/api/token', formData);
+
     if (result.err) {
       this.changeLoadingStatus(Loading.ERROR);
       this.changeErrorText(result.err);
@@ -111,7 +116,7 @@ export default class AuthStore implements IAuthStore {
 
     this.changeLoadingStatus(Loading.DONE);
     localStorage.setItem('access_token', result.res?.data.access_token as string);
-    window.location.pathname = '/';
+    this.RouterStore.navigate('/');
   }
 
 
@@ -215,7 +220,7 @@ export default class AuthStore implements IAuthStore {
 
     this.changeLoadingStatus(Loading.DONE);
     localStorage.setItem('access_token', result.res?.data.access_token as string);
-    window.location.pathname = '/';
+    this.RouterStore.navigate('/');
   }
 
   @action changeErrorText = (text: string): void => {

@@ -127,6 +127,12 @@ async def give_answer(
             detail="Сначала начните олимпиаду",
         )
 
+    if time_now > registered_user.end_time:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Ваше время вышло",
+        )
+
     olympiad = await crud.olympiad.get(db, id=registered_user.olympiad_id)
 
     if not olympiad:
@@ -136,12 +142,6 @@ async def give_answer(
         )
 
     check_olympiad_availability(olympiad)
-
-    if time_now > registered_user.end_time:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Ваше время вышло",
-        )
 
     task = await crud.task.get(db, id=answer_data.task_id)
 

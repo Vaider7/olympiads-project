@@ -10,10 +10,11 @@
   top: 0;
   left: 0;
   z-index: -1;
+
   .loader {
     width: 50px !important;
     height: 50px !important;
-}
+  }
 }
 
 
@@ -44,15 +45,33 @@
         text-align: center;
         border: 1px solid $gray-400;
         padding: 12px;
+        min-height: 44px;
       }
 
+      .inlineLoader {
+        width: 16px !important;
+        height: 16px !important;
+      }
       .takePart {
+        width: 184px;
         transition: $hover-transition;
         color: $main-100;
         cursor: pointer;
 
         &:hover {
           color: $main-200;
+        }
+      }
+
+      .finished {
+        color: $gray-500;
+      }
+
+      .waitingStart {
+        cursor: text;
+
+        &:hover {
+          color: $main-100;
         }
       }
     }

@@ -1,14 +1,6 @@
-import {RouteComponentProps} from 'react-router';
 import {ChangeEvent} from 'react';
-import {Loading} from '../enums';
+import {OlympiadStatus} from '../enums';
 
-interface IRouterStore {
-  setRoute: <T extends RouteComponentProps>(location: T['location'], match: T['match'], history: T['history']) => void,
-  history: Record<string, unknown>,
-  match: Record<string, unknown>,
-  location: Record<string, unknown>,
-  getParams: (param: string) => string | null
-}
 
 interface IStoreWrapperProps {
   pathToFile: string
@@ -27,14 +19,6 @@ interface IAuthStore {
   errorText: string
 }
 
-interface IUserStore {
-  loadingStatus: Loading,
-  isLogged: boolean,
-  user: Record<string, unknown>,
-  changeIsLogged: (value: boolean) => void,
-  setUser: (user: Record<string, unknown>) => void,
-  changeLoadingStatus: (status: Loading) => void
-}
 
 interface Olympiad {
   id: number,
@@ -46,8 +30,9 @@ interface Olympiad {
   end: Date,
   formattedStart?: string,
   formattedEnd?: string,
-  formattedDuration: string
+  formattedDuration: string,
+  status: OlympiadStatus
 }
 
 
-export {IRouterStore, IStoreWrapperProps, IAuthStore, IUserStore, Olympiad};
+export {IStoreWrapperProps, IAuthStore, Olympiad};

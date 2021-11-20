@@ -41,4 +41,3 @@ class Olympiad(OlympiadInDB):
 
 class OlympiadWithTasks(OlympiadInDB):
     tasks: Optional[list[Task]]
-    registered_user_id: positive_int

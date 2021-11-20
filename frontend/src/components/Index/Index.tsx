@@ -4,8 +4,9 @@ import {default as s} from './Index.scss';
 import {MobXProviderContext, observer} from 'mobx-react';
 import IndexStore from '../../stores/IndexStore';
 import Loader from '../shared/Loaders/Loader';
-import {Loading} from '../../enums';
+import {Loading, OlympiadStatus} from '../../enums';
 import Button from '../shared/Button/Button';
+import classNames from 'classnames';
 
 @observer
 export default class Index extends React.Component {
@@ -14,7 +15,17 @@ export default class Index extends React.Component {
 
 
   render (): ReactNode {
-    const {loadingStatus, olympiads, selectedOlympiad, setOlympiadDetails, takePart} = this.IndexStore;
+    const {
+      loadingStatus,
+      olympiads,
+      selectedOlympiad,
+      setOlympiadDetails,
+      takePart,
+      registeredOlympiads,
+      displayShit,
+      loadingRegistered,
+      startOlympiad
+    } = this.IndexStore;
     if (loadingStatus === Loading.PENDING && olympiads.length === 0) {
       return (
         <div className={s.loaderWrapper}>
@@ -47,7 +58,7 @@ export default class Index extends React.Component {
               onClick={takePart}
             >
               {loadingStatus === Loading.PENDING ?
-                <Loader type={'element'} className={s.loader} thickness={3} /> :
+                <Loader type={'element'} className={s.loader} thickness={2} /> :
                 'Принять участие'}
             </Button>
             <Button
@@ -86,14 +97,36 @@ export default class Index extends React.Component {
                 <td className={s.td}>{olympiad.formattedStart}</td>
                 <td className={s.td}>{olympiad.formattedEnd}</td>
                 <td className={s.td}>{olympiad.formattedDuration}</td>
-                <td className={s.td}>
+                <td className={s.td} style={{width: '184px'}}>
                   <span
-                    className={s.takePart}
+                    className={
+                      classNames({
+                        [s.takePart]: olympiad.status === OlympiadStatus.WAITING_START ||
+                          olympiad.status === OlympiadStatus.IN_PROGRESS,
+                        [s.finished]: olympiad.status === OlympiadStatus.FINISHED,
+                        [s.waitingStart]: olympiad.status === OlympiadStatus.WAITING_START &&
+                          registeredOlympiads.includes(olympiad.id)
+                      })
+                    }
                     onClick={() => {
+                      if (olympiad.status === OlympiadStatus.FINISHED)
+                        return;
+
+                      if (registeredOlympiads.includes(olympiad.id) && olympiad.status === OlympiadStatus.WAITING_START)
+                        return;
+
+                      if (registeredOlympiads.includes(olympiad.id) && olympiad.status === OlympiadStatus.IN_PROGRESS) {
+                        startOlympiad(olympiad.id);
+
+                        return;
+                      }
+
+
                       setOlympiadDetails(olympiad.id);
                     }}
                   >
-                    Участвовать
+                    {loadingRegistered === Loading.PENDING ?
+                      <Loader type={'element'} className={s.inlineLoader} thickness={3} /> : displayShit(olympiad)}
                   </span>
                 </td>
               </tr>

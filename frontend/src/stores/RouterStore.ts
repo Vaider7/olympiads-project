@@ -1,31 +1,42 @@
-import {observable, get, action, makeObservable} from 'mobx';
-import {RouteComponentProps} from 'react-router';
-import {IRouterStore} from '../types';
+import {Location, NavigateFunction, Params, URLSearchParamsInit} from 'react-router-dom';
+import {makeObservable, observable} from 'mobx';
 
-export default class RouterStore implements IRouterStore {
-  @observable location = {};
-  @observable match = {};
-  history = {};
 
-  constructor () {
-    makeObservable(this);
-  }
+// eslint-disable-next-line @typescript-eslint/no-type-alias
+type IURLParamSearcher = (arg0: URLSearchParamsInit,
+  navigateOptions?: ({replace?: boolean | undefined, state?: unknown} | undefined)) => void
 
-  @action setRoute = <K extends RouteComponentProps> (
-    location: K['location'],
-    match: K['match'],
-    history: K['history']
-  ): void => {
+
+export default class RouterStore {
+
+  navigator!: NavigateFunction;
+  location!: Location;
+  params!: Params;
+
+  urlParamSetter!: IURLParamSearcher;
+
+  setRouterStore = (navigator: NavigateFunction, location: Location, params: Params,
+    urlParamSetter: IURLParamSearcher): void => {
+    this.navigator = navigator;
     this.location = location;
-    this.match = match;
-    this.history = history;
+    this.params = params;
+    this.urlParamSetter = urlParamSetter;
   }
 
-  @action getParams = (param: string): string | null => {
-    const search: string = get(this.location, 'search');
+  navigate = (path: string): void => {
+    this.navigator?.(path);
+  }
+
+  getParams = (param: string): string | null => {
+    const search: string = this.location?.search;
 
     const urlAddress = new URLSearchParams(search);
 
     return urlAddress.get(param);
   }
+
+  setParams = (params: string): void => {
+    this.urlParamSetter(params);
+  }
+
 }

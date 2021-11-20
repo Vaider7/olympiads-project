@@ -12,7 +12,7 @@ export default class Body extends React.Component<{children: ReactNode, excludeH
     if (!excludeHeader) {
       return (
         <React.Fragment>
-          <div id={'notify-block'} />
+          {/*<div id={'notify-block'} />*/}
           <div className={s.page}>
             <Header />
             <div className={s.pageWrapper}>

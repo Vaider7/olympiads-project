@@ -1,6 +1,6 @@
 from typing import Any
 
-from fastapi import APIRouter, Depends, FastAPI, HTTPException, Path, Security
+from fastapi import APIRouter, Body, Depends, FastAPI, HTTPException, Path, Security
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
@@ -11,7 +11,7 @@ from ..custom_types.postitve_int import positive_int
 from ..deps.deps import get_current_user
 from ..models import User
 from ..schemas.task import TaskCreate
-from ..utils import check_olympiad_availability
+from ..utils import check_olympiad_availability, check_registered_user
 
 router = APIRouter(tags=["Olympiads"])
 
@@ -42,7 +42,9 @@ async def create_olympiad(
     del olympiad_data.tasks
 
     max_points = sum([task.points for task in tasks])
-    olympiad = await crud.olympiad.create_olympiad(db, obj_in=olympiad_data, max_points=max_points)
+    olympiad = await crud.olympiad.create_olympiad(
+        db, obj_in=olympiad_data, max_points=max_points
+    )
 
     for task in tasks:
         dict_task = task.dict()
@@ -57,7 +59,9 @@ async def create_olympiad(
     "/api/olympiads/delete",
     dependencies=[Security(get_current_user, scopes=["teacher"])],
 )
-async def delete_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_id: positive_int) -> Any:
+async def delete_olympiad(
+    *, db: AsyncSession = Depends(deps.get_db), olympiad_id: positive_int
+) -> Any:
     """
     Remove olympiad
     - **olympiad_id**: id of olympiad
@@ -78,7 +82,9 @@ async def delete_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_i
     "/api/olympiads/update",
     dependencies=[Security(get_current_user, scopes=["teacher"])],
 )
-async def update_olympiad(*, db: AsyncSession = Depends(deps.get_db), olympiad_data: schemas.OlympiadUpdate) -> Any:
+async def update_olympiad(
+    *, db: AsyncSession = Depends(deps.get_db), olympiad_data: schemas.OlympiadUpdate
+) -> Any:
     """
     Create new olympiad
     - **id**: id of olympiad
@@ -112,7 +118,7 @@ async def get_olympiad(
     current_user: User = Security(get_current_user, scopes=["student"]),
     olympiad_id: positive_int = Path(...),
 ) -> Any:
-    olympiad = await crud.olympiad.get_olympiad(db, id=olympiad_id, user_id=current_user.id)
+    olympiad = await crud.olympiad.get(db, id=olympiad_id)
 
     if not olympiad:
         raise HTTPException(
@@ -126,21 +132,36 @@ async def get_olympiad(
         db, olympiad_id=olympiad_id, user_id=current_user.id
     )
 
-    if not registered_user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Сначала пройдите регистрацию",
-        )
-
-    if not registered_user.start_time:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="Сначала начните олимпиаду",
-        )
-
-    olympiad.registered_user_id = registered_user.id
+    check_registered_user(registered_user)
 
     return olympiad
+
+
+@router.post("/api/olympiads/get-tasks-ids", response_model=list[positive_int])
+async def get_tasks_ids(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(get_current_user, scopes=["student"]),
+    olympiad_id: positive_int = Body(...),
+) -> Any:
+    olympiad = await crud.olympiad.get_olympiad(db, id=olympiad_id)
+
+    if not olympiad:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Олимпиада не найдена",
+        )
+
+    check_olympiad_availability(olympiad)
+
+    registered_user = await crud.registered_user.get_already_registered(
+        db, olympiad_id=olympiad_id, user_id=current_user.id
+    )
+
+    check_registered_user(registered_user)
+
+    tasks_ids = [task.id for task in olympiad.tasks]
+    return tasks_ids
 
 
 def add_route(app: FastAPI) -> None:
