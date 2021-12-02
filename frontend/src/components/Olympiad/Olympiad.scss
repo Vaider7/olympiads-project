@@ -1,0 +1,140 @@
+@import "../shared/variables/variables";
+
+.olympiad {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  .leftSide {
+    max-width: 930px;
+    width: 100%;
+    .header {
+      font-weight: 600;
+      font-size: 24px;
+    }
+
+    .discipline {
+      color: $gray-500;
+      font-size: 18px;
+      letter-spacing: .3px;
+      margin-top: 15px;
+    }
+
+    .taskName {
+      margin-top: 60px;
+      font-size: 22px;
+    }
+
+    .taskDescription, .taskQuestion {
+      margin-top: 16px;
+      font-size: 16px;
+      color: $gray-500;
+    }
+
+    .questionHeader {
+      font-size: 20px;
+      margin-top: 35px;
+    }
+
+    .answerText {
+      font-size: 20px;
+      margin-top: 35px;
+    }
+
+    .answers {
+      display: flex;
+      flex-direction: column;
+      margin-top: 16px;
+      font-size: 16px;
+    }
+
+    .points {
+      font-size: 12px;
+      margin-top: 6px;
+      color: $gray-500
+    }
+
+    .typedAnswer {
+      max-width: 500px;
+    }
+
+
+
+
+
+    .bottomButtons {
+      margin-top: 60px;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+
+      .endOlympiad {
+        padding: 0;
+        background-color: $white;
+        font-size: 16px;
+        border: none;
+        color: $gray-500;
+        cursor: pointer;
+        transition: $hover-transition;
+
+        &:hover {
+          color: $success-100;
+        }
+      }
+
+      .nextTask {
+      background-color: $white;
+      font-size: 16px;
+      color: $main-100;
+      cursor: pointer;
+      padding: 0;
+      border: none;
+      transition: $hover-transition;
+
+      &:hover {
+        color: $main-200;
+      }
+    }
+
+    .nextTaskDisabled {
+      color: $gray-400;
+      cursor: default;
+
+      &:hover {
+        color: $gray-400;
+      }
+    }
+    }
+
+  }
+
+  .tabs {
+    color: $gray-500;
+    box-sizing: border-box;
+    padding: 0 20px 20px 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+
+    .tab {
+      cursor: pointer;
+      margin-bottom: 15px;
+      font-size: 16px;
+      transition: $hover-transition;
+
+      &:hover {
+        color: $gray-700;
+      }
+    }
+
+    .activeTab {
+      color: $main-100;
+
+      &:hover {
+        color: $main-100;
+      }
+    }
+  }
+}

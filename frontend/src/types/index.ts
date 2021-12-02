@@ -1,12 +1,17 @@
 import {ChangeEvent} from 'react';
-import {OlympiadStatus} from '../enums';
+import {OlympiadStatus, TaskType} from '../enums';
 
 
-interface IStoreWrapperProps {
+export interface Tuple<T, U> extends Array<T|U> {
+  0: T,
+  1: U
+}
+
+export interface IStoreWrapperProps {
   pathToFile: string
 }
 
-interface IAuthStore {
+export interface IAuthStore {
   pageState: string,
   togglePage: () => void,
   recordLoginData: (e: ChangeEvent<HTMLInputElement>) => void,
@@ -20,7 +25,7 @@ interface IAuthStore {
 }
 
 
-interface Olympiad {
+export interface Olympiad {
   id: number,
   discipline: string,
   description: string,
@@ -34,5 +39,15 @@ interface Olympiad {
   status: OlympiadStatus
 }
 
-
-export {IStoreWrapperProps, IAuthStore, Olympiad};
+export interface Task {
+  id: number,
+  name?: string,
+  description: string,
+  question: string,
+  answers?: {no: number, possibleAnswer: string}[],
+  taskType: TaskType,
+  typedAnswer?: string[],
+  deletedAt?: Date,
+  olympiadId: number,
+  points: number
+}

@@ -54,6 +54,17 @@ const request = async (
       );
     }
 
+    if (result.data instanceof Array) {
+      for (let elem of result.data) {
+        if (elem as Record<string, unknown> instanceof Object) {
+          elem = renameProperties(elem as Record<string, unknown>);
+        }
+      }
+    } else {
+      result.data = renameProperties(result.data as Record<string, unknown>);
+    }
+
+
     return {res: result};
   } catch (e: unknown) {
     result = e as AxiosError;
@@ -70,5 +81,46 @@ const request = async (
     }
   }
 };
+
+function renameProperties (obj: Record<string, unknown>): Record<string, unknown> {
+  const niceNamedObj: Record<string, unknown> = {};
+
+
+  for (const prop in obj) {
+    if (obj[prop] instanceof Array) {
+      const newObjs = [];
+      for (let elem of obj[prop] as unknown[]) {
+        if (elem instanceof Object) {
+          elem = renameProperties(elem as Record<string, unknown>);
+          newObjs.push(elem);
+        }
+      }
+      obj[prop] = newObjs;
+    } else if (obj[prop] instanceof Object) {
+      obj[prop] = renameProperties(obj[prop] as Record<string, unknown>);
+    }
+
+    const propArr = [];
+    let nextUpper = false;
+    for (const letter of prop) {
+      if (letter === '_') {
+        nextUpper = true;
+        continue;
+      }
+      if (nextUpper) {
+        propArr.push(letter.toUpperCase());
+        nextUpper = false;
+        continue;
+      }
+
+      propArr.push(letter);
+    }
+    niceNamedObj[propArr.join('')] = obj[prop];
+  }
+
+  return niceNamedObj;
+
+}
+
 
 export default request;

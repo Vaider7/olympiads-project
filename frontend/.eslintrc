@@ -179,7 +179,7 @@
       },
       {
         "selector": ["property", "variableLike"],
-        "format": ["PascalCase", "camelCase"]
+        "format": ["PascalCase", "camelCase", "snake_case"]
       },
       {
         "selector": "enumMember",

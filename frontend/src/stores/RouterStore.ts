@@ -1,5 +1,4 @@
 import {Location, NavigateFunction, Params, URLSearchParamsInit} from 'react-router-dom';
-import {makeObservable, observable} from 'mobx';
 
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias

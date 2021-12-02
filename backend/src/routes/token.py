@@ -22,7 +22,7 @@ async def access_token(
     if not user:
         raise HTTPException(status_code=400, detail="Неверный логин или пароль")
 
-    scopes: list[str] = ["student"]
+    scopes = ["student"]
     if "@tyuiu.ru" in user.username:
         scopes.append("teacher")
 

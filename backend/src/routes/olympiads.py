@@ -137,7 +137,7 @@ async def get_olympiad(
     return olympiad
 
 
-@router.post("/api/olympiads/get-tasks-ids", response_model=list[positive_int])
+@router.post("/api/olympiads/get-tasks-ids-names", response_model=list[tuple[positive_int, str]])
 async def get_tasks_ids(
     *,
     db: AsyncSession = Depends(deps.get_db),
@@ -160,8 +160,8 @@ async def get_tasks_ids(
 
     check_registered_user(registered_user)
 
-    tasks_ids = [task.id for task in olympiad.tasks]
-    return tasks_ids
+    tasks_ids_names = [tuple([task.id, task.name]) for task in olympiad.tasks]
+    return tasks_ids_names
 
 
 def add_route(app: FastAPI) -> None:

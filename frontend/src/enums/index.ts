@@ -9,7 +9,7 @@ export enum Loading {
 export enum TaskType {
   ONE = 'one',
   MULTI = 'multi',
-  HANDWRITTEN = 'handwritten',
+  TYPED = 'typed',
   FREE = 'free'
 }
 
