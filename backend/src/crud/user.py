@@ -19,9 +19,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         user = result.scalar()
         return user
 
-    async def authenticate(
-        self, db: AsyncSession, *, username: str, password: str
-    ) -> Optional[User]:
+    async def authenticate(self, db: AsyncSession, *, username: str, password: str) -> Optional[User]:
         user = await self.get_by_username(db, username=username)
         if not user:
             return None
@@ -29,9 +27,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
             return None
         return user
 
-    async def update_user(
-        self, db: AsyncSession, *, db_obj: User, obj_in: UserUpdate
-    ) -> User:
+    async def update_user(self, db: AsyncSession, *, db_obj: User, obj_in: UserUpdate) -> User:
         if obj_in.password:
             obj_in.password = get_password_hash(obj_in.password)  # type: ignore
         obj_data = jsonable_encoder(obj_in)

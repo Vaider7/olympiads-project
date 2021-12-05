@@ -9,8 +9,7 @@ export enum Loading {
 export enum TaskType {
   ONE = 'one',
   MULTI = 'multi',
-  TYPED = 'typed',
-  FREE = 'free'
+  TYPED = 'typed'
 }
 
 export enum OlympiadStatus {

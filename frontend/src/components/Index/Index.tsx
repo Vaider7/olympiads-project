@@ -24,7 +24,8 @@ export default class Index extends React.Component {
       registeredOlympiads,
       displayShit,
       loadingRegistered,
-      startOlympiad
+      startOlympiad,
+      finishedOlympiad
     } = this.IndexStore;
     if (loadingStatus === Loading.PENDING && olympiads.length === 0) {
       return (
@@ -33,7 +34,7 @@ export default class Index extends React.Component {
         </div>
       );
     }
-
+    console.log(finishedOlympiad)
 
     if (selectedOlympiad) {
       return (
@@ -105,7 +106,8 @@ export default class Index extends React.Component {
                           olympiad.status === OlympiadStatus.IN_PROGRESS,
                         [s.finished]: olympiad.status === OlympiadStatus.FINISHED,
                         [s.waitingStart]: olympiad.status === OlympiadStatus.WAITING_START &&
-                          registeredOlympiads.includes(olympiad.id)
+                          registeredOlympiads.includes(olympiad.id),
+                        [s.finishedByUser]: finishedOlympiad.includes(olympiad.id)
                       })
                     }
                     onClick={() => {

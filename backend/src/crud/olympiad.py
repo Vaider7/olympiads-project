@@ -6,7 +6,7 @@ from sqlalchemy.orm import joinedload
 
 from src.schemas.olympiad import OlympiadCreate, OlympiadUpdate
 
-from ..models import Olympiad, User
+from ..models import Olympiad
 from ..utils import set_attrs
 from .base import CRUDBase
 
@@ -14,9 +14,7 @@ Null = null()
 
 
 class CRUDOlympiad(CRUDBase[Olympiad, OlympiadCreate, OlympiadUpdate]):
-    async def get_olympiad(
-        self, db: AsyncSession, *, id: int, with_deleted: bool = False
-    ) -> Optional[Olympiad]:
+    async def get_olympiad(self, db: AsyncSession, *, id: int, with_deleted: bool = False) -> Optional[Olympiad]:
         if not with_deleted:
             stmt = (
                 select(self.model)
@@ -27,18 +25,12 @@ class CRUDOlympiad(CRUDBase[Olympiad, OlympiadCreate, OlympiadUpdate]):
                 .options(joinedload("tasks"))
             )
         else:
-            stmt = (
-                select(self.model)
-                .where(self.model.id == id)
-                .options(joinedload("tasks"))
-            )
+            stmt = select(self.model).where(self.model.id == id).options(joinedload("tasks"))
         result = await db.execute(stmt)
 
         return result.scalars().first()
 
-    async def create_olympiad(
-        self, db: AsyncSession, *, obj_in: OlympiadCreate, max_points: int = 0
-    ) -> Olympiad:
+    async def create_olympiad(self, db: AsyncSession, *, obj_in: OlympiadCreate, max_points: int = 0) -> Olympiad:
         db_obj: Olympiad = self.model()
         set_attrs(db_obj, obj_in)
         db_obj.max_points = max_points
@@ -63,12 +55,7 @@ class CRUDOlympiad(CRUDBase[Olympiad, OlympiadCreate, OlympiadUpdate]):
                 .order_by(desc(self.model.id))
             )
         else:
-            stmt = (
-                select(self.model)
-                .offset(offset)
-                .limit(limit)
-                .order_by(desc(self.model.id))
-            )
+            stmt = select(self.model).offset(offset).limit(limit).order_by(desc(self.model.id))
         result = await db.execute(stmt)
 
         return result.scalars().all()

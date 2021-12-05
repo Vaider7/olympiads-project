@@ -74,6 +74,14 @@
           color: $main-100;
         }
       }
+
+      .finishedByUser {
+        color: $success-100 !important;
+
+        &:hover {
+          color: $success-200 !important;
+        }
+      }
     }
 
     .colored {

@@ -26,13 +26,9 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
         """
         self.model = model
 
-    async def get(
-        self, db: AsyncSession, *, id: int, with_deleted: bool = False
-    ) -> Optional[ModelType]:
+    async def get(self, db: AsyncSession, *, id: int, with_deleted: bool = False) -> Optional[ModelType]:
         if not with_deleted:
-            stmt = select(self.model).where(
-                self.model.id == id, self.model.deletedAt == Null
-            )
+            stmt = select(self.model).where(self.model.id == id, self.model.deletedAt == Null)
         else:
             stmt = select(self.model).where(self.model.id == id)
         result = await db.execute(stmt)
@@ -48,12 +44,7 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
         with_deleted: bool = False,
     ) -> list[Optional[ModelType]]:
         if not with_deleted:
-            stmt = (
-                select(self.model)
-                .where(self.model.deletedAt == Null)
-                .offset(offset)
-                .limit(limit)
-            )
+            stmt = select(self.model).where(self.model.deletedAt == Null).offset(offset).limit(limit)
         else:
             stmt = select(self.model).offset(offset).limit(limit)
         result = await db.execute(stmt)
@@ -77,9 +68,7 @@ class CRUDBase(Generic[ModelType, CreateSchemeType, UpdateSchemeType]):
         return db_obj
 
     async def delete(self, db: AsyncSession, *, id: int) -> Optional[ModelType]:
-        stmt = select(self.model).filter(
-            self.model.id == id, self.model.deletedAt == Null
-        )
+        stmt = select(self.model).filter(self.model.id == id, self.model.deletedAt == Null)
         result = await db.execute(stmt)
         db_obj = result.scalar()
 

@@ -3,13 +3,21 @@ import {MobXProviderContext, observer} from 'mobx-react';
 import OlympiadStore from '../../stores/OlympiadStore';
 import Loader from '../shared/Loaders/Loader';
 import {Loading, TaskType} from '../../enums';
-import {FormControlLabel, RadioGroup} from '@material-ui/core';
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  FormControlLabel,
+  RadioGroup,
+} from '@material-ui/core';
 import Checkbox from '../shared/Inputs/Checkbox';
 import Radio from '../shared/Inputs/Radio';
 import {default as s} from './Olympiad.scss';
 import classNames from 'classnames';
 import TextField from '../shared/Inputs/TextField';
-import Button from '../shared/Button/Button';
 
 @observer
 export default class Olympiad extends React.Component {
@@ -28,7 +36,13 @@ export default class Olympiad extends React.Component {
       radioValue,
       changeRadioValue,
       changeCheckboxesValues,
-      nextTask
+      nextTask,
+      checkboxesValues,
+      typedAnswer,
+      changeTypedAnswer,
+      toggleCloseDialog,
+      isCloseDialog,
+      endOlympiad
     } = this.OlympiadStore;
 
     if (loadingStatus === Loading.PENDING) {
@@ -93,6 +107,7 @@ export default class Olympiad extends React.Component {
                     // @ts-expect-error: MUI is broken
                     onChange={changeCheckboxesValues}
                     name={String(answer.no)}
+                    checked={checkboxesValues[answer.no]}
                   />)}
               </div> :
               currentTask.taskType === TaskType.TYPED ?
@@ -101,6 +116,8 @@ export default class Olympiad extends React.Component {
                   <TextField
                     label={'Ваш ответ'}
                     className={s.typedAnswer}
+                    onChange={changeTypedAnswer}
+                    value={typedAnswer}
                   />
                 </div> : null}
           <div className={s.bottomButtons}>
@@ -113,7 +130,7 @@ export default class Olympiad extends React.Component {
             >
               Следующая задача
             </button>
-            <button className={s.endOlympiad}>Завершить олимпиаду</button>
+            <button className={s.endOlympiad} onClick={toggleCloseDialog}>Завершить олимпиаду</button>
           </div>
 
         </div>
@@ -131,11 +148,28 @@ export default class Olympiad extends React.Component {
             >
               {tuple[1]}
             </div>
-
           )}
         </div>
+        <Dialog
+          open={isCloseDialog}
+          onClose={toggleCloseDialog}
+        >
+          <DialogTitle>Завершить олимпиаду?</DialogTitle>
+          <DialogContent>
+            <DialogContentText>
+              Все ваши ответы сохранены. Вы действительно хотите завершить олимпиаду?
+            </DialogContentText>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={toggleCloseDialog}>
+              Отклонить
+            </Button>
+            <Button style={{color: '#00A5F7'}} onClick={endOlympiad}>
+              Завершить
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
-
   }
 }

@@ -22,13 +22,11 @@ def get_utctime() -> datetime:
     return datetime.now(timezone.utc)
 
 
-def check_olympiad_availability(olympiad: Olympiad) -> None:
+def check_olympiad_availability(olympiad: Olympiad | None) -> None:
     time_now = get_utctime()
 
     if not olympiad:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND, detail="Олимпиада не найдена"
-        )
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Олимпиада не найдена")
 
     if time_now > olympiad.end:
         raise HTTPException(
@@ -47,16 +45,10 @@ def check_registered_user(registered_user: Optional[RegisteredUser]) -> None:
     time_now = get_utctime()
 
     if not registered_user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Сначала пройдите регистрацию"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Сначала пройдите регистрацию")
 
     if not registered_user.start_time:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Сначала начните олимпиаду"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Сначала начните олимпиаду")
 
     if time_now > registered_user.end_time:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN, detail="Ваше время вышло"
-        )
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Ваше время вышло")

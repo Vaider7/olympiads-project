@@ -10,6 +10,7 @@ from src.deps import deps
 from ..custom_types.postitve_int import positive_int
 from ..deps.deps import get_current_user
 from ..models import User
+from ..schemas import RegisteredUser
 from ..schemas.task import TaskCreate
 from ..utils import check_olympiad_availability, check_registered_user
 
@@ -111,6 +112,48 @@ async def get_olympiads(*, db: AsyncSession = Depends(deps.get_db)) -> Any:
     return olympiads
 
 
+@router.post(
+    "/api/olympiads/get-tasks-ids-names", response_model=list[tuple[positive_int, str]]
+)
+async def get_tasks_ids(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(get_current_user, scopes=["student"]),
+    olympiad_id: positive_int = Body(...),
+) -> Any:
+    olympiad = await crud.olympiad.get_olympiad(db, id=olympiad_id)
+
+    if not olympiad:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Олимпиада не найдена",
+        )
+
+    check_olympiad_availability(olympiad)
+
+    registered_user = await crud.registered_user.get_already_registered(
+        db, olympiad_id=olympiad_id, user_id=current_user.id
+    )
+
+    check_registered_user(registered_user)
+    olympiad.tasks.sort(key=lambda x: x.id)
+    tasks_ids_names = [tuple([task.id, task.name]) for task in olympiad.tasks]
+    return tasks_ids_names
+
+
+@router.get("/api/olympiads/get-finished", response_model=list[int])
+async def get_finished_olympiads(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(get_current_user, scopes=["student"]),
+) -> Any:
+    finished_olympiads = await crud.registered_user.get_finished_olympiads(
+        db, user_id=current_user.id
+    )
+    finished_ids = [elem.olympiad_id for elem in finished_olympiads]
+    return finished_ids
+
+
 @router.get("/api/olympiads/{olympiad_id}", response_model=schemas.OlympiadWithTasks)
 async def get_olympiad(
     *,
@@ -135,33 +178,6 @@ async def get_olympiad(
     check_registered_user(registered_user)
 
     return olympiad
-
-
-@router.post("/api/olympiads/get-tasks-ids-names", response_model=list[tuple[positive_int, str]])
-async def get_tasks_ids(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    current_user: User = Security(get_current_user, scopes=["student"]),
-    olympiad_id: positive_int = Body(...),
-) -> Any:
-    olympiad = await crud.olympiad.get_olympiad(db, id=olympiad_id)
-
-    if not olympiad:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Олимпиада не найдена",
-        )
-
-    check_olympiad_availability(olympiad)
-
-    registered_user = await crud.registered_user.get_already_registered(
-        db, olympiad_id=olympiad_id, user_id=current_user.id
-    )
-
-    check_registered_user(registered_user)
-
-    tasks_ids_names = [tuple([task.id, task.name]) for task in olympiad.tasks]
-    return tasks_ids_names
 
 
 def add_route(app: FastAPI) -> None:

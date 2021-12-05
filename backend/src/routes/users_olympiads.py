@@ -1,20 +1,21 @@
 from datetime import timedelta
 from typing import Any
 
-from fastapi import (APIRouter, Depends, FastAPI, HTTPException, Security,
-                     status)
+from fastapi import APIRouter, Body, Depends, FastAPI, HTTPException, Security, status
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from src import crud
+from src import crud, schemas
 from src.deps import deps
 
 from ..custom_types.postitve_int import positive_int
 from ..deps.deps import get_current_user
 from ..enums.task_type import task_type
 from ..models import User
-from ..schemas.registered_user import (RegisteredUserBase,
-                                       RegisteredUserCreate,
-                                       RegisteredUserUpdate)
+from ..schemas.registered_user import (
+    RegisteredUserBase,
+    RegisteredUserCreate,
+    RegisteredUserUpdate,
+)
 from ..schemas.result import ResultBase
 from ..schemas.user_answer import UserAnswerCreate
 from ..utils import check_olympiad_availability, get_utctime
@@ -195,6 +196,34 @@ async def give_answer(
         db, db_obj=user_answer, obj_in=answer_data, user_id=current_user.id
     )
     return
+
+
+@router.post(
+    "/api/users-olympiads/get-given-answer", response_model=schemas.UserAnswerInDB
+)
+async def get_given_answer(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(deps.get_current_user, scopes=["student"]),
+    task_id: positive_int = Body(...),
+    olympiad_id: positive_int = Body(...)
+) -> Any:
+    user_answer = await crud.user_answer.get_user_answer(
+        db, task_id=task_id, olympiad_id=olympiad_id, user_id=current_user.id
+    )
+    return user_answer
+
+
+@router.put("/api/users-olympiads/end-olympiad")
+async def end_olympiad(
+    *,
+    db: AsyncSession = Depends(deps.get_db),
+    current_user: User = Security(deps.get_current_user, scopes=["student"]),
+    olympiad_id: positive_int = Body(...)
+) -> Any:
+    await crud.registered_user.end_olympiad(
+        db, user_id=current_user.id, olympiad_id=olympiad_id
+    )
 
 
 @router.get(

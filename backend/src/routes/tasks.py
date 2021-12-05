@@ -10,8 +10,7 @@ from src.deps import deps
 from src.deps.deps import get_current_user
 from src.models import User
 from src.schemas.task import Task, TaskCreate, TaskUpdate
-from src.utils import (check_olympiad_availability, check_registered_user,
-                       get_utctime)
+from src.utils import check_olympiad_availability, check_registered_user
 
 router = APIRouter(tags=["Tasks"])
 
@@ -22,32 +21,20 @@ async def get_tasks(db: AsyncSession = Depends(deps.get_db)) -> Any:
     return tasks
 
 
-@router.post(
-    "/api/tasks/create", dependencies=[Security(get_current_user, scopes=["teacher"])]
-)
-async def create_task(
-    *, db: AsyncSession = Depends(deps.get_db), task_data: TaskCreate
-) -> Any:
+@router.post("/api/tasks/create", dependencies=[Security(get_current_user, scopes=["teacher"])])
+async def create_task(*, db: AsyncSession = Depends(deps.get_db), task_data: TaskCreate) -> Any:
     await crud.task.create(db, obj_in=task_data)
     return
 
 
-@router.put(
-    "/api/tasks/update", dependencies=[Security(get_current_user, scopes=["teacher"])]
-)
-async def update_task(
-    *, db: AsyncSession = Depends(deps.get_db), task_data: TaskUpdate
-) -> Any:
+@router.put("/api/tasks/update", dependencies=[Security(get_current_user, scopes=["teacher"])])
+async def update_task(*, db: AsyncSession = Depends(deps.get_db), task_data: TaskUpdate) -> Any:
     await crud.task.update(db, obj_in=task_data)
     return
 
 
-@router.delete(
-    "/api/tasks/delete", dependencies=[Security(get_current_user, scopes=["teacher"])]
-)
-async def delete_task(
-    *, db: AsyncSession = Depends(deps.get_db), task_id: positive_int
-) -> Any:
+@router.delete("/api/tasks/delete", dependencies=[Security(get_current_user, scopes=["teacher"])])
+async def delete_task(*, db: AsyncSession = Depends(deps.get_db), task_id: positive_int) -> Any:
     task = await crud.task.delete(db, id=task_id)
 
     if not task:

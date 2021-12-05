@@ -2,7 +2,7 @@ import {action, makeObservable, observable} from 'mobx';
 import RouterStore from './RouterStore';
 import request from './utils';
 import {Olympiad, Task, Tuple} from '../types';
-import {Loading} from '../enums';
+import {Loading, TaskType} from '../enums';
 import {ChangeEvent} from 'react';
 
 
@@ -17,11 +17,20 @@ export default class OlympiadStore {
 
   err!: string;
 
+  firstRender = true;
+
+  timeout!: NodeJS.Timeout;
+
+
   @observable loadingStatus = Loading.PENDING;
 
   @observable radioValue = '1';
 
   @observable checkboxesValues: Record<string, boolean> = {};
+
+  @observable typedAnswer = '';
+
+  @observable isCloseDialog = false;
 
   constructor (store: RouterStore) {
     makeObservable(this);
@@ -29,6 +38,21 @@ export default class OlympiadStore {
     this.RouterStore = store;
     this.loadOlympiad();
   }
+
+  @action toggleCloseDialog = (): void => {
+    this.isCloseDialog = !this.isCloseDialog;
+  }
+
+  @action changeTypedAnswer = (e: ChangeEvent<HTMLInputElement>): void => {
+    this.typedAnswer = e.target.value;
+
+    clearTimeout(this.timeout);
+
+    this.timeout = setTimeout(action(() => {
+      this.giveAnswer([this.typedAnswer]);
+    })
+    , 400);
+  };
 
   @action changeCheckboxesValues = (e: ChangeEvent<HTMLInputElement>, checked: boolean): void => {
     this.checkboxesValues = {...this.checkboxesValues, [e.target.name]: checked};
@@ -82,7 +106,40 @@ export default class OlympiadStore {
 
 
     this.currentTask = result.res?.data as Task;
+
+    if (this.currentTask.answers && this.currentTask.taskType === TaskType.MULTI) {
+
+      for (const elem of this.currentTask.answers) {
+        action(() => this.checkboxesValues = {...this.checkboxesValues, [elem.no]: false})();
+      }
+    }
+
+
+    await this.getGivenAnswer();
     setTimeout(action(() => this.loadingStatus = Loading.DONE), 700);
+  }
+
+  @action getGivenAnswer = async (): Promise<void> => {
+    const result = await request('post', '/api/users-olympiads/get-given-answer',
+      {olympiad_id: this.olympiad.id, task_id: this.currentTask.id});
+
+    const userAnswer = result.res?.data.answer as string[] | undefined;
+    if (userAnswer?.length) {
+      switch (this.currentTask.taskType) {
+        case TaskType.TYPED:
+          action(() => [this.typedAnswer] = userAnswer)();
+          break;
+
+        case TaskType.ONE:
+          action(() => [this.radioValue] = userAnswer)();
+          break;
+
+        case TaskType.MULTI:
+          for (const elem of userAnswer) {
+            action(() => this.checkboxesValues = {...this.checkboxesValues, [elem]: true})();
+          }
+      }
+    }
   }
 
   @action changeCurrentTask = async (id: number): Promise<void> => {
@@ -101,8 +158,28 @@ export default class OlympiadStore {
       return;
     }
     this.currentTask = result.res?.data as Task;
+
+    if (this.currentTask.answers && this.currentTask.taskType === TaskType.MULTI) {
+
+      for (const elem of this.currentTask.answers) {
+        action(() => this.checkboxesValues = {...this.checkboxesValues, [elem.no]: false})();
+      }
+    }
+
+    await this.getGivenAnswer();
     this.RouterStore.setParams(`taskId=${id}`);
     setTimeout(action(() => this.loadingStatus = Loading.DONE), 700);
+  }
+
+  @action endOlympiad = async (): Promise<void> => {
+    this.loadingStatus = Loading.PENDING;
+
+    await request('put', '/api/users-olympiads/end-olympiad',
+      {olympiad_id: this.olympiad.id});
+
+    this.RouterStore.navigate('/');
+    window.notify('success', 'Олимпиада завершена');
+
   }
 
   nextTask = async (): Promise<void> => {
@@ -119,6 +196,12 @@ export default class OlympiadStore {
 
     if (result.err) {
       window.notify('err', result.err);
+    }
+  }
+
+  renderCheckboxes = (no: number): boolean | undefined => {
+    if (this.firstRender) {
+      return this.checkboxesValues[no];
     }
   }
 }

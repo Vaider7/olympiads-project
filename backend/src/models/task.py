@@ -7,8 +7,6 @@ from sqlalchemy.orm import relationship
 
 from src.db.base_class import Base
 
-from ..schemas.answer import Answer
-
 if TYPE_CHECKING:
     from .olympiad import Olympiad
     from .user_answer import UserAnswer

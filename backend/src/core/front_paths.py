@@ -1,7 +1,1 @@
-front_paths = [
-    "/",
-    "/teacher",
-    "/auth",
-    "/olympiads",
-    "/olympiads/{id}"
-]
+front_paths = ["/", "/teacher", "/auth", "/olympiads", "/olympiads/{id}"]

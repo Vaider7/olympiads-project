@@ -53,7 +53,6 @@ const request = async (
         }
       );
     }
-
     if (result.data instanceof Array) {
       for (let elem of result.data) {
         if (elem as Record<string, unknown> instanceof Object) {
@@ -92,6 +91,8 @@ function renameProperties (obj: Record<string, unknown>): Record<string, unknown
       for (let elem of obj[prop] as unknown[]) {
         if (elem instanceof Object) {
           elem = renameProperties(elem as Record<string, unknown>);
+          newObjs.push(elem);
+        } else {
           newObjs.push(elem);
         }
       }

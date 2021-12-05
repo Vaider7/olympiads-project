@@ -13,9 +13,7 @@ router = APIRouter(tags=["Users"])
 
 
 @router.post("/api/users/signup")
-async def signup(
-    *, db: AsyncSession = Depends(deps.get_db), user_data: schemas.user.UserCreate
-) -> Any:
+async def signup(*, db: AsyncSession = Depends(deps.get_db), user_data: schemas.user.UserCreate) -> Any:
     """
     Create new user
     - **username**: unique username (email shape)
@@ -40,9 +38,7 @@ async def signup(
 
 @router.get("/api/users/get", response_model=schemas.User)
 async def get_user(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    current_user: User = Depends(deps.get_current_user)
+    *, db: AsyncSession = Depends(deps.get_db), current_user: User = Depends(deps.get_current_user)
 ) -> Any:
     user = await crud.user.get(db, id=current_user.id)
     return user
@@ -50,9 +46,7 @@ async def get_user(
 
 @router.get("/api/users/get-registered", response_model=list[Optional[positive_int]])
 async def get_registered_olympiad(
-    *,
-    db: AsyncSession = Depends(deps.get_db),
-    current_user: User = Security(deps.get_current_user, scopes=["student"])
+    *, db: AsyncSession = Depends(deps.get_db), current_user: User = Security(deps.get_current_user, scopes=["student"])
 ) -> Any:
     olympiads = await crud.registered_user.get_olympiads(db, user_id=current_user.id)
 

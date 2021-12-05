@@ -10,6 +10,15 @@ export default class IndexStore {
   UserStore!: UserStore;
   RouterStore!: RouterStore;
 
+
+  @observable loadingStatus = Loading.PENDING;
+  @observable loadingRegistered = Loading.PENDING;
+  @observable selectedOlympiad: Olympiad | undefined;
+
+  olympiads: Olympiad[] = [];
+  registeredOlympiads: number[] = [];
+  finishedOlympiad: number[] = [];
+
   constructor (store: UserStore, store2: RouterStore) {
     makeObservable(this);
 
@@ -18,15 +27,8 @@ export default class IndexStore {
 
     this.loadOlympiads();
 
-    when(() => this.UserStore.isLogged, this.loadRegistered);
+    when(() => this.UserStore.isLogged, this.loadUserOlympiads);
   }
-
-  @observable loadingStatus = Loading.PENDING;
-  @observable loadingRegistered = Loading.PENDING;
-  @observable selectedOlympiad: Olympiad | undefined;
-
-  olympiads: Olympiad[] = [];
-  registeredOlympiads: number[] = [];
 
   @action changeLoadingStatus = (status: Loading): void => {
     this.loadingStatus = status;
@@ -81,9 +83,12 @@ export default class IndexStore {
     this.changeLoadingStatus(Loading.DONE);
   }
 
-  loadRegistered = async (): Promise<void> => {
-    const result = await request('get', '/api/users/get-registered');
+  loadUserOlympiads = async (): Promise<void> => {
+    let result = await request('get', '/api/users/get-registered');
     this.registeredOlympiads = result.res?.data;
+
+    result = await request('get', '/api/olympiads/get-finished');
+    this.finishedOlympiad = result.res?.data;
 
     setTimeout(() => {
       this.changeLoadingRegistered(Loading.DONE);
@@ -114,6 +119,10 @@ export default class IndexStore {
       !this.registeredOlympiads.includes(olympiad.id)) {
 
       return 'Участвовать';
+    }
+
+    if (this.finishedOlympiad.includes(olympiad.id)) {
+      return 'Посмотреть результат';
     }
 
     if (olympiad.status === OlympiadStatus.FINISHED) {
