@@ -51,3 +51,13 @@ export interface Task {
   olympiadId: number,
   points: number
 }
+
+export interface Result {
+  taskId: number,
+  taskPoints: number,
+  taskAnswers: {no: number, possibleAnswer: string, verity: boolean}[]
+  rightAnswers: string[],
+  userAnswer: string[],
+  userPoints: number,
+  taskType: TaskType
+}

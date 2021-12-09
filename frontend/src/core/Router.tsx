@@ -43,6 +43,10 @@ const Router: React.FunctionComponent = () =>
           path={'/olympiads/:olympiadId'}
           element={<StoreWrapper pathToFile={'OlympiadView'} />}
         />
+        <Route
+          path={'/olympiads/check-result/:olympiadId'}
+          element={<StoreWrapper pathToFile={'ResultView'} />}
+        />
         {/*<Route>*/}
         {/*  <>*/}
         {/*    /!*404. Добавь страницу,*!/*/}

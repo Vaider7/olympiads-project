@@ -54,15 +54,19 @@ const request = async (
       );
     }
     if (result.data instanceof Array) {
-      for (let elem of result.data) {
+      const niceNamedObj = [];
+      for (const elem of result.data) {
         if (elem as Record<string, unknown> instanceof Object) {
-          elem = renameProperties(elem as Record<string, unknown>);
+          niceNamedObj.push(renameProperties(elem as Record<string, unknown>));
+        } else {
+          niceNamedObj.push(elem);
         }
       }
+
+      result.data = niceNamedObj;
     } else {
       result.data = renameProperties(result.data as Record<string, unknown>);
     }
-
 
     return {res: result};
   } catch (e: unknown) {

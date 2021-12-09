@@ -11,7 +11,7 @@ import classNames from 'classnames';
 @observer
 export default class Index extends React.Component {
   static contextType = MobXProviderContext;
-  IndexStore: IndexStore = this.context.IndexStore
+  IndexStore: IndexStore = this.context.IndexStore;
 
 
   render (): ReactNode {
@@ -25,7 +25,8 @@ export default class Index extends React.Component {
       displayShit,
       loadingRegistered,
       startOlympiad,
-      finishedOlympiad
+      finishedOlympiad,
+      checkResult
     } = this.IndexStore;
     if (loadingStatus === Loading.PENDING && olympiads.length === 0) {
       return (
@@ -34,7 +35,6 @@ export default class Index extends React.Component {
         </div>
       );
     }
-    console.log(finishedOlympiad)
 
     if (selectedOlympiad) {
       return (
@@ -111,6 +111,12 @@ export default class Index extends React.Component {
                       })
                     }
                     onClick={() => {
+                      if (finishedOlympiad.includes(olympiad.id)) {
+                        checkResult(olympiad.id);
+
+                        return;
+                      }
+
                       if (olympiad.status === OlympiadStatus.FINISHED)
                         return;
 

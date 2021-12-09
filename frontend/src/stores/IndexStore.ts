@@ -142,4 +142,8 @@ export default class IndexStore {
     await request('patch', `/api/users-olympiads/start?olympiad_id=${id}`);
     this.RouterStore.navigate(`/olympiads/${id}`);
   }
+
+  checkResult = (olympiadId: number): void => {
+    this.RouterStore.navigate(`/olympiads/check-result/${olympiadId}`);
+  }
 }
