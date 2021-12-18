@@ -115,7 +115,7 @@ export default class AuthStore implements IAuthStore {
     }
 
     this.changeLoadingStatus(Loading.DONE);
-    localStorage.setItem('access_token', result.res?.data.access_token as string);
+    localStorage.setItem('access_token', result.res?.data.accessToken as string);
     this.RouterStore.navigate('/');
   }
 
@@ -219,7 +219,7 @@ export default class AuthStore implements IAuthStore {
     }
 
     this.changeLoadingStatus(Loading.DONE);
-    localStorage.setItem('access_token', result.res?.data.access_token as string);
+    localStorage.setItem('access_token', result.res?.data.accessToken as string);
     this.RouterStore.navigate('/');
   }
 

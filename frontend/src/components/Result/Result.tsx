@@ -26,40 +26,42 @@ export default class Result extends React.Component {
     return (
       <div className={s.page}>
         <div className={s.header}>
-          {`«${olympiad.name} #${olympiad.id}» - результаты`}
+          {`${olympiad.name} #${olympiad.id} – Результаты`}
         </div>
         {results.map((result) => {
           if (result.taskType === TaskType.ONE) {
-            for (const answer of result.taskAnswers) {
-              const rightAnswer = result.taskAnswers.find((elem) => elem.verity);
+            const rightAnswer = result.taskAnswers.find((elem) => elem.verity);
 
-              return (
-                <RadioGroup aria-label={'answer'} value={rightAnswer?.no} className={s.answers} key={result.taskId}>
+            return (
+              <RadioGroup aria-label={'answer'} value={rightAnswer?.no} className={s.answers} key={result.taskId}>
+                {result.taskAnswers.map((answer) =>
+                <React.Fragment key={answer.no}>
                   <FormControlLabel
-                    key={result.taskId}
                     control={<Radio />}
                     label={answer.possibleAnswer}
-                    value={String(answer.no)}
+                    value={answer.no}
                   />
-                </RadioGroup>
-              );
-            }
-          } else if (result.taskType === TaskType.MULTI) {
-            result.taskAnswers.map((answer) => {
-              const rightAnswer = result.taskAnswers.filter((elem) => elem.verity);
+                </React.Fragment>
+                )}
+              </RadioGroup>
+            );
 
-              return (
-                <RadioGroup aria-label={'answer'} value={rightAnswer} className={s.answers} key={result.taskId}>
-                  <FormControlLabel
-                    key={result.taskId}
-                    control={<Radio />}
-                    label={answer.possibleAnswer}
-                    value={String(answer.no)}
-                  />
-                </RadioGroup>
-              );
-            });
           }
+          // else if (result.taskType === TaskType.MULTI) {
+          //   result.taskAnswers.map((answer) => {
+          //     const rightAnswer = result.taskAnswers.filter((elem) => elem.verity);
+          //
+          //     return (
+          //       <RadioGroup aria-label={'answer'} value={rightAnswer} className={s.answers} key={answer.no}>
+          //         <FormControlLabel
+          //           control={<Radio />}
+          //           label={answer.possibleAnswer}
+          //           value={String(answer.no)}
+          //         />
+          //       </RadioGroup>
+          //     );
+          //   });
+          // }
         })}
       </div>
     );

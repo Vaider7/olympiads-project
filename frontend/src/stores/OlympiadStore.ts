@@ -173,9 +173,8 @@ export default class OlympiadStore {
 
   @action endOlympiad = async (): Promise<void> => {
     this.loadingStatus = Loading.PENDING;
-
     await request('put', '/api/users-olympiads/end-olympiad',
-      {olympiad_id: this.olympiad.id});
+      this.olympiad.id);
 
     this.RouterStore.navigate('/');
     window.notify('success', 'Олимпиада завершена');

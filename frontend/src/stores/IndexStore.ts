@@ -62,10 +62,10 @@ export default class IndexStore {
       const time = new Date();
 
       olympiad.formattedStart =
-        `${start.getDate()}.${String(start.getMonth()).length === 1 ? String(`0${start.getMonth()}`) :
+        `${String(start.getDate()).length === 1 ? String(`0${start.getDate()}`) : start.getDate()}.${String(start.getMonth()).length === 1 ? String(`0${start.getMonth()}`) :
           start.getMonth()} в ${start.getHours()}:${start.getMinutes()}`;
       olympiad.formattedEnd =
-        `${end.getDate()}.${String(end.getMonth()).length === 1 ? String(`0${end.getMonth()}`) :
+        ` ${String(end.getDate()).length === 1 ? String(`0${end.getDate()}`) : end.getDate()}.${String(end.getMonth()).length === 1 ? String(`0${end.getMonth()}`) :
           end.getMonth()} в ${end.getHours()}:${end.getMinutes()}`;
       olympiad.formattedDuration = `${Math.floor(duration / 60)} ч ${duration % 60 === 0 ? '' : `${duration % 60} мин`}`;
 
