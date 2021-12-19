@@ -53,9 +53,11 @@ export interface Task {
 }
 
 export interface Result {
+  taskName: string,
   taskId: number,
   taskPoints: number,
-  taskAnswers: {no: number, possibleAnswer: string, verity: boolean}[]
+  taskAnswers: {no: number, possibleAnswer: string, verity: boolean}[],
+  typedAnswer: string[],
   rightAnswers: string[],
   userAnswer: string[],
   userPoints: number,

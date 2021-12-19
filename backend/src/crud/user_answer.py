@@ -51,6 +51,7 @@ class CRUDUserAnswer(CRUDBase[UserAnswer, UserAnswerCreate, UserAnswerUpdate]):
         result = await db.execute(
             select(UserAnswer)
             .where(UserAnswer.user_id == user_id, UserAnswer.olympiad_id == olympiad_id)
+            .order_by(self.model.task_id)
             .options(joinedload(UserAnswer.task))
         )
 

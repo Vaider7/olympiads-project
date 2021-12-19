@@ -243,11 +243,25 @@ async def get_result(
     for user_answer in user_answers:
 
         user_points: float = 0
-        right_answers = None
         task = user_answer.task
         if task.task_type == task_type.TYPED.value:
             if user_answer.answer[0] in task.typed_answers:
                 user_points = task.points
+
+            processed_objs.append(
+                {
+                    "task_id": task.id,
+                    "task_name": task.name,
+                    "task_points": task.points,
+                    "typed_answer": task.typed_answers,
+                    "right_answers": task.typed_answers,
+                    "user_answer": user_answer.answer,
+                    "user_points": user_points,
+                    "task_type": task.task_type,
+                }
+            )
+            print(processed_objs)
+            continue
 
         else:
             right_answers = [
@@ -272,6 +286,7 @@ async def get_result(
         processed_objs.append(
             {
                 "task_id": task.id,
+                "task_name": task.name,
                 "task_points": task.points,
                 "task_answers": task.answers,
                 "right_answers": right_answers,
@@ -280,6 +295,7 @@ async def get_result(
                 "task_type": task.task_type,
             }
         )
+        print(processed_objs)
     return processed_objs
 
 

@@ -8,8 +8,10 @@ from src.schemas.answer import Answer
 
 
 class ResultBase(BaseModel):
+    task_name: str
     task_id: positive_int
     task_points: non_negative_int
+    typed_answer: Optional[list[str]]
     task_answers: Optional[list[Answer]]
     right_answers: Optional[list[str]]
     user_answer: Optional[list[str]]

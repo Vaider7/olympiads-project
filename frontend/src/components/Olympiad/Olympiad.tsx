@@ -104,7 +104,7 @@ export default class Olympiad extends React.Component {
                     control={<Checkbox />}
                     label={answer.possibleAnswer}
                     key={answer.no}
-                    // @ts-expect-error: MUI is broken
+                    // @ts-expect-error: MUI is broken here
                     onChange={changeCheckboxesValues}
                     name={String(answer.no)}
                     checked={checkboxesValues[answer.no]}
